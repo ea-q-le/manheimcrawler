@@ -33,8 +33,10 @@ public class Main {
 
 		// go to Simulcast page
 		MyManheimPage.goToSimulcast();
-
-		// wait for the page to load
+		waitForLoad();
+		
+		// go to the next 7 days
+		MyManheimPage.goToNext7Days();
 		waitForLoad();
 
 		// iterate through each auction vehicle
@@ -45,8 +47,10 @@ System.out.println(Vehicle.getMatches());
 		SendEmail.sendEmailTo(
 				"sean.gadimoff@gmail.com",
 				"Manheim vehicles for " + todaysDate("MM/dd/yyyy"), 
-				Vehicle.getMatches().toString());
+				Vehicle.printMatches());
 		// TODO -> email should contain Auction + Lane + Vehicle info
+		// LIMIT to 2010 or newer
+		// look for 7 days in auction
 
 		// quit the driver
 		BrowserUtils.wait(10);
@@ -80,18 +84,20 @@ System.out.println(current);
 			waitForLoad();
 
 			// analyze each CR within a given auction
-			iterateAuctionCRs();
+			iterateAuctionCRs(current);
 
-System.out.println("Currently in : " + current);
+System.out.println("Currently in: " + current);
 
 			// go back to the Simulcast page to continue the loop
 			Driver.getDriver().navigate().back();
 		}
 	}
 
-	private static void iterateAuctionCRs() {
-		// create variables to store vehicle title and announcements
+	private static void iterateAuctionCRs(String auction) {
+		// create variables to store vehicle auction, title & announcements
 		Vehicle vehicle = new Vehicle();
+		vehicle.setAuction(auction);
+System.out.println("Vehicle auction is: " + vehicle.getAuction());
 		
 		// fetch the list of all CR buttons (vehicles with CR)
 		List<WebElement> crLinks = AuctionPage.getCrLinkList();
@@ -134,7 +140,8 @@ System.out.println("Opened the CR window for: " + vehicle.getTitle());
 								.getText());
 System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
 				} catch (NoSuchElementException e) {
-					System.err.println("Element not found, encountered OLD Condition Report.");
+					try {
+						System.err.println("Element not found, encountered OLD Condition Report.");
 
 					// fetch the vehicle information
 					vehicle.setTitle(Driver.getDriver()
@@ -146,6 +153,22 @@ System.out.println("Opened the old version CR window for: " + vehicle.getTitle()
 							.findElement(By.cssSelector(".announcements>td"))
 								.getText());
 System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
+					} catch (NoSuchElementException ex) {
+						System.err.println("Element not found AGAIN, encountered OLDer Condition Report.");
+						
+						// fetch the vehicle information
+						vehicle.setTitle(Driver.getDriver()
+								.findElement(By.cssSelector("td[colspan='3']"))
+									.getText());
+System.out.println("Opened the older version CR window for: " + vehicle.getTitle());
+						
+						// fetch the vehicle ANNOUNCEMENTS
+						vehicle.setAnnouncement(Driver.getDriver()
+								.findElement(By.cssSelector(".announcements>.mainfont"))
+									.getText());
+System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
+						
+					}
 				}
 				
 				// analyze vehicle announcements and add
@@ -159,8 +182,9 @@ System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
 				Driver.getDriver().switchTo().window(parentWindow);
 				
 			}
-			//TODO - this line is for testing, remove when done
-			if (Vehicle.getMatches().size() > 3) break;
+			
+			//TODO -> remove this limitation for PROD run
+			if (Vehicle.getMatches().size() > 10) break;
 		}
 	}
 

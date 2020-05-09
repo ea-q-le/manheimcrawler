@@ -15,8 +15,15 @@ public class MyManheimPage {
 	@FindBy (linkText = "Simulcast")
 	private WebElement simulcastLink;
 	
+	@FindBy (linkText = "Next 7 Days")
+	private WebElement next7DaysLink;
+	
 	public static void goToSimulcast() {
 		new MyManheimPage().simulcastLink.click();
+	}
+	
+	public static void goToNext7Days() {
+		new MyManheimPage().next7DaysLink.click();
 	}
 
 }

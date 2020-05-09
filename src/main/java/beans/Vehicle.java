@@ -5,17 +5,27 @@ import java.util.List;
 
 public class Vehicle {
 	
+	private String auction;
 	private String title;
 	private String announcement;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
 	public Vehicle() { }
-	public Vehicle(String title, String announcement) {
+	public Vehicle(String auction, String title, String announcement) {
+		this.auction = auction;
 		this.title = title;
 		this.announcement = announcement;
 	}
 	
+	public String getAuction() {
+		return auction;
+	}
+	public void setAuction(String auction) {
+		if (auction.contains(":"))
+			auction = auction.substring(0, auction.indexOf(':') -1);
+		this.auction = auction;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -40,10 +50,20 @@ public class Vehicle {
 	
 	@Override
 	public String toString() {
-		return "Vehicle [title=" + title 
-				+ ",\n"
-				+ "announcements=" + announcement
-				+ "]";
+		return auction
+				+ "\n" + title
+				+ "\nANNOUNCEMENT: " + announcement;
+	}
+	
+	public static String printMatches() {
+		StringBuilder retStrb = new StringBuilder();
+		
+		for (Vehicle each : matches)
+			retStrb.append("\n")
+				.append(each.toString())
+				.append("\n");
+		
+		return retStrb.toString().trim();
 	}
 
 }
