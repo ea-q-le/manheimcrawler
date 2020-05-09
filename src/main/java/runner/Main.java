@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,7 +24,7 @@ public class Main {
 		// setup the driver
 		WebDriverManager.chromedriver().setup();
 		WebDriver driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
 		
 		// go to manheim.com
@@ -33,8 +34,8 @@ public class Main {
 		driver.findElement(By.linkText("Sign In")).click();
 		
 		// add username and password
-		driver.findElement(By.id("user_username")).sendKeys("amerimond");
-		driver.findElement(By.id("user_password")).sendKeys("ziadalnmir7777");
+		driver.findElement(By.id("user_username")).sendKeys(System.getenv("username"));
+		driver.findElement(By.id("user_password")).sendKeys(System.getenv("password"));
 		driver.findElement(By.id("submit")).click();
 		
 		// click on Simulcast
@@ -73,7 +74,7 @@ System.out.println("Waiting for page to load...");
 			waitForLoad(driver);
 			
 			// fetch the list of all CR buttons (vehicles with CR)
-			List<WebElement> crLinks = driver.findElements(By.cssSelector("tr>td.make>div[name='sticker']>a.icon"));
+			List<WebElement> crLinks = driver.findElements(By.cssSelector("tr>td.make>div[name='sticker']>a.icon-cr"));
 			
 			// for each CR link
 			for (int j = 0; j < crLinks.size(); j++) {
@@ -84,29 +85,45 @@ System.out.println("Current window is: " + driver.getTitle());
 				
 				// click on the current CR link
 				crLinks.get(j).click();
-				try { Thread.sleep(5000); } catch(InterruptedException e) {}
+				try { Thread.sleep(1000); } catch(InterruptedException e) {}
 								
 				// fetch the newly opened window handle and switch to it
 				Set<String> handles =  driver.getWindowHandles();
 				for(String windowHandle  : handles) {
 					if(!windowHandle.equals(parentWindow)) {
-						driver.switchTo().window(windowHandle);
-						
+						driver.switchTo().window(windowHandle);			
 System.out.println("Current window after switch is: " + driver.getTitle());
 						
 						// wait for the new window to finish loading
 						waitForLoad(driver);
 						
 						// switch to the Frame where vehicle info is stored
+						// this frame ID is true for both NEW and OLD CR windows
 						driver.switchTo().frame("ecrFrame");
 						
-						// fetch the vehicle information
-						String vehicleTitle = driver.findElement(By.cssSelector("h2[class='ymmt-headline']")).getText();
+						// create variables to store vehicle title and announcements
+						String vehicleTitle = "";
+						String announcement = "";
+						
+						// create TRY-CATCH block for new CR && the old CR windows
+						try {
+							// fetch the vehicle information
+							vehicleTitle = driver.findElement(By.cssSelector("h2[class='ymmt-headline']")).getText();
 System.out.println("Opened the CR window for: " + vehicleTitle);						
 						
-						// fetch the vehicle ANNOUCEMENTS
-						String announcement = driver.findElement(By.id("cr_announcements")).getText();
-System.out.println("The ANNOUCEMENTS are: " + announcement);						
+							// fetch the vehicle ANNOUCEMENTS
+							announcement = driver.findElement(By.id("cr_announcements")).getText();
+System.out.println("The ANNOUCEMENTS are: " + announcement);	
+						} catch (NoSuchElementException e) {
+							System.err.println("Element not found, encountered OLD Condition Report.");
+							
+							// fetch the vehicle information
+							vehicleTitle = driver.findElement(By.className("vehicleSummary")).getText();
+System.out.println("Opened the old version CR window for: " + vehicleTitle);								
+							// fetch the vehicle ANNOUNCEMENTS
+							announcement = driver.findElement(By.cssSelector(".announcements>td")).getText();
+System.out.println("The ANNOUCEMENTS are: " + announcement);							
+						}
 						
 						// close the CR window
 						driver.close();
@@ -146,7 +163,7 @@ System.out.println("Currently in : " + current);
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(pageLoadCondition);
     }
 
