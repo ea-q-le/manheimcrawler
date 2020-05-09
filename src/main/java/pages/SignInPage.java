@@ -13,13 +13,13 @@ public class SignInPage {
 	}
 	
 	@FindBy (id = "user_username")
-	public WebElement usernameInput;
+	private WebElement usernameInput;
 	
 	@FindBy (id = "user_password")
-	public WebElement passwordInput;
+	private WebElement passwordInput;
 	
 	@FindBy (id = "submit")
-	public WebElement signInButton;
+	private WebElement signInButton;
 		
 	public static void signIn() {
 		SignInPage page = new SignInPage();

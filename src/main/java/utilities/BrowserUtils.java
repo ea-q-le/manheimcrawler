@@ -1,7 +1,7 @@
 package utilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.*;
+import java.util.*;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -78,5 +78,12 @@ public class BrowserUtils {
         WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(pageLoadCondition);
     }
+	
+	public static String todaysDate(String dateFormat) {
+		DateFormat df = new SimpleDateFormat(dateFormat);
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        return df.format(date);
+	}
 
 }

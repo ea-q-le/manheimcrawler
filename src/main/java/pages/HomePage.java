@@ -14,7 +14,7 @@ public class HomePage {
 	}
 	
 	@FindBy (linkText = "Sign In")
-	public WebElement signInButton;
+	private WebElement signInButton;
 	
 	public static void goToHomePage() {
 		Driver.getDriver().get(

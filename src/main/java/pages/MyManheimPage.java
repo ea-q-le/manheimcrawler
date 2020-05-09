@@ -13,7 +13,7 @@ public class MyManheimPage {
 	}
 	
 	@FindBy (linkText = "Simulcast")
-	public WebElement simulcastLink;
+	private WebElement simulcastLink;
 	
 	public static void goToSimulcast() {
 		new MyManheimPage().simulcastLink.click();
