@@ -1,4 +1,4 @@
-package utilities;
+package analyzers;
 
 import java.io.File;
 import java.util.ArrayList;

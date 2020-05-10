@@ -21,10 +21,25 @@
 		"content" : "transmission"
 	},
 	{
+		"content" : "trans slips"
+	},
+	{
+		"content" : "bad trans"
+	},
+	{
 		"content" : "bad engine"
 	},
 	{
 		"content" : "engine noise"
+	},
+	{
+		"content" : "eng noise"
+	},
+	{
+		"content" : "engine issues"
+	},
+	{
+		"content" : "tick"
 	},
 	{
 		"content" : "electrical"
@@ -49,5 +64,11 @@
 	},
 	{
 		"content" : "hazard"
+	},
+	{
+		"content" : "inop"
+	},
+	{
+		"content" : "srs issues"
 	}
 ]

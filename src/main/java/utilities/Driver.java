@@ -70,7 +70,7 @@ public class Driver {
 			}
 		}
 		
-		driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 		return driver;
 	}
 

@@ -38,6 +38,9 @@ public class BrowserUtils {
 		} catch (InterruptedException e) {
 		}
 	}
+	public static void waitQt() {
+		try { Thread.sleep(250); } catch (InterruptedException e) { }
+	}
 
 	/**
 	 * Given List<WebElement>, returns the List<String> of texts of the
@@ -64,7 +67,7 @@ public class BrowserUtils {
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 60);
+        WebDriverWait wait = new WebDriverWait(driver, 240);
         wait.until(pageLoadCondition);
     }
 	public static void waitForLoad() {
@@ -75,7 +78,7 @@ public class BrowserUtils {
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 60);
+        WebDriverWait wait = new WebDriverWait(driver, 240);
         wait.until(pageLoadCondition);
     }
 	

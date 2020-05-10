@@ -1,19 +1,18 @@
 package runner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 
-import beans.Vehicle;
+import analyzers.CRAnalyzer;
+import beans.*;
 import pages.*;
 import utilities.*;
 
 import static utilities.BrowserUtils.*;
-import static utilities.AnnouncementSpecsAnalyzer.matchesAnnouncementSpecs;;
+import static analyzers.AnnouncementSpecsAnalyzer.matchesAnnouncementSpecs;
+import static analyzers.AuctionAnalyzer.matchesAuctionList;
 
 public class Main {
 
@@ -50,10 +49,8 @@ System.out.println(Vehicle.getMatches());
 				Vehicle.printMatches());
 		// TODO -> email should contain Auction + Lane + Vehicle info
 		// LIMIT to 2010 or newer
-		// look for 7 days in auction
 
 		// quit the driver
-		BrowserUtils.wait(10);
 		Driver.getDriver().quit();
 	}
 
@@ -71,8 +68,9 @@ System.out.println(auctionNames);
 			String current = auctionNames.get(i);
 System.out.println(current);
 
-			// ignore if the auction contains 0 vehicles
-			if (current.contains("View all 0 vehicles"))
+			// ignore if the auction contains 0 vehicles or not in the list
+			if (current.contains("View all 0 vehicles") || 
+					!matchesAuctionList(new Auction(current)))
 				continue;
 
 			// refresh the vehicle links to avoid stale element exception
@@ -109,7 +107,7 @@ System.out.println("Vehicle auction is: " + vehicle.getAuction());
 
 			// click on the current CR link
 			crLinks.get(j).click();
-			BrowserUtils.wait(1);
+			BrowserUtils.waitQt();
 
 			// fetch the newly opened window handle and switch to it
 			Set<String> handles = Driver.getDriver().getWindowHandles();
@@ -123,53 +121,16 @@ System.out.println("Vehicle auction is: " + vehicle.getAuction());
 				waitForLoad(Driver.getDriver());
 
 				// switch to the Frame where vehicle info is stored
-				// this frame ID is true for both NEW and OLD CR windows
 				Driver.getDriver().switchTo().frame("ecrFrame");
 
-				// create TRY-CATCH block for new CR && the old CR windows
-				try {
-					// fetch the vehicle information
-					vehicle.setTitle(Driver.getDriver()
-							.findElement(By.cssSelector("h2[class='ymmt-headline']"))
-								.getText());
+				// if vehicle announcement can't be pulled, set it undefined
+				if (!CRAnalyzer.isVersion1(vehicle) &&
+						!CRAnalyzer.isVersion2(vehicle) &&
+							!CRAnalyzer.isVersion3(vehicle))
+					vehicle.setAnnouncement("Undefined");
+				
 System.out.println("Opened the CR window for: " + vehicle.getTitle());
-
-					// fetch the vehicle ANNOUCEMENTS
-					vehicle.setAnnouncement(Driver.getDriver()
-							.findElement(By.id("cr_announcements"))
-								.getText());
 System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
-				} catch (NoSuchElementException e) {
-					try {
-						System.err.println("Element not found, encountered OLD Condition Report.");
-
-					// fetch the vehicle information
-					vehicle.setTitle(Driver.getDriver()
-							.findElement(By.className("vehicleSummary"))
-								.getText());
-System.out.println("Opened the old version CR window for: " + vehicle.getTitle());
-					// fetch the vehicle ANNOUNCEMENTS
-					vehicle.setAnnouncement(Driver.getDriver()
-							.findElement(By.cssSelector(".announcements>td"))
-								.getText());
-System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
-					} catch (NoSuchElementException ex) {
-						System.err.println("Element not found AGAIN, encountered OLDer Condition Report.");
-						
-						// fetch the vehicle information
-						vehicle.setTitle(Driver.getDriver()
-								.findElement(By.cssSelector("td[colspan='3']"))
-									.getText());
-System.out.println("Opened the older version CR window for: " + vehicle.getTitle());
-						
-						// fetch the vehicle ANNOUNCEMENTS
-						vehicle.setAnnouncement(Driver.getDriver()
-								.findElement(By.cssSelector(".announcements>.mainfont"))
-									.getText());
-System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
-						
-					}
-				}
 				
 				// analyze vehicle announcements and add
 				if (matchesAnnouncementSpecs(vehicle))
@@ -184,7 +145,7 @@ System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
 			}
 			
 			//TODO -> remove this limitation for PROD run
-			if (Vehicle.getMatches().size() > 10) break;
+			if (Vehicle.getMatches().size() > 3) break;
 		}
 	}
 
