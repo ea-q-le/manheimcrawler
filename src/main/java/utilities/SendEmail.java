@@ -20,6 +20,8 @@ import utilities.ConfigReader;
  * @author Shahin 'Sean' Gadimov
  */
 public class SendEmail {
+	public static final short EMAIL_LIMIT;
+	
 	private final static String emailFrom;
 	private final static String username;
 	private final static String password;
@@ -33,6 +35,12 @@ public class SendEmail {
 		password = "mllmztlxyimdazae";
 		properties = new Properties();
 		
+		if (ConfigReader.getProperty("emailLimit") == null || 
+				ConfigReader.getProperty("emailLimit").isEmpty())
+			EMAIL_LIMIT = Short.MAX_VALUE;
+		else
+			EMAIL_LIMIT = Short.parseShort(
+					ConfigReader.getProperty("emailLimit"));
 	}
 //TODO -> remove print statements below after testing is complete
 	public static void sendEmailTo(String to, String subject, String body) {

@@ -44,11 +44,9 @@ public class Main {
 System.out.println(Vehicle.getMatches());
 		// send an email the output String with run date
 		SendEmail.sendEmailTo(
-				"sean.gadimoff@gmail.com",
-				"Manheim vehicles for " + todaysDate("MM/dd/yyyy"), 
+				ConfigReader.getProperty("recipients"),
+				"Manheim vehicles for the week - Test run on " + todaysDate("MM/dd/yyyy"), 
 				Vehicle.printMatches());
-		// TODO -> email should contain Auction + Lane + Vehicle info
-		// LIMIT to 2010 or newer
 
 		// quit the driver
 		Driver.getDriver().quit();
@@ -58,7 +56,6 @@ System.out.println(Vehicle.getMatches());
 	private static void crawler() {
 		// store all auction names
 		List<String> auctionNames = SimulcastPage.getAuctionNamesList();
-System.out.println(auctionNames);
 
 		// store the links to each auction vehicle lists
 		List<WebElement> viewVehiclesLinkList = new ArrayList<WebElement>();
@@ -66,7 +63,6 @@ System.out.println(auctionNames);
 		// for each auction
 		for (int i = 0; i < auctionNames.size(); i++) {
 			String current = auctionNames.get(i);
-System.out.println(current);
 
 			// ignore if the auction contains 0 vehicles or not in the list
 			if (current.contains("View all 0 vehicles") || 
@@ -83,25 +79,36 @@ System.out.println(current);
 
 			// analyze each CR within a given auction
 			iterateAuctionCRs(current);
+			
+			// limit vehicle count per the email limitation
+			if (Vehicle.getMatches().size() > SendEmail.EMAIL_LIMIT) 
+				return;
 
-System.out.println("Currently in: " + current);
 
 			// go back to the Simulcast page to continue the loop
 			Driver.getDriver().navigate().back();
 		}
 	}
 
-	private static void iterateAuctionCRs(String auction) {
-		// create variables to store vehicle auction, title & announcements
-		Vehicle vehicle = new Vehicle();
-		vehicle.setAuction(auction);
-System.out.println("Vehicle auction is: " + vehicle.getAuction());
-		
+	private static void iterateAuctionCRs(String auction) {		
 		// fetch the list of all CR buttons (vehicles with CR)
 		List<WebElement> crLinks = AuctionPage.getCrLinkList();
 
 		// for each CR link
 		for (int j = 0; j < crLinks.size(); j++) {
+			// create variables to store vehicle auction, title & announcements
+			Vehicle vehicle = new Vehicle();
+			vehicle.setAuction(auction);
+
+			// fetch the vehicle year for compatibility
+			short year = AuctionPage.getVehicleYear(crLinks.get(j)); 
+			if (year < Vehicle.YEAR_CRITERIA) continue;
+			vehicle.setYear(year);
+			
+			// fetch vehicle lane information
+			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
+			vehicle.setLane(lane);
+
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
 
@@ -129,8 +136,7 @@ System.out.println("Vehicle auction is: " + vehicle.getAuction());
 							!CRAnalyzer.isVersion3(vehicle))
 					vehicle.setAnnouncement("Undefined");
 				
-System.out.println("Opened the CR window for: " + vehicle.getTitle());
-System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
+System.out.println("Current vehicle info: " + vehicle.toString());
 				
 				// analyze vehicle announcements and add
 				if (matchesAnnouncementSpecs(vehicle))
@@ -144,8 +150,10 @@ System.out.println("The ANNOUCEMENTS are: " + vehicle.getAnnouncement());
 				
 			}
 			
-			//TODO -> remove this limitation for PROD run
-			if (Vehicle.getMatches().size() > 3) break;
+			// limit vehicle count per the email limitation
+			if (Vehicle.getMatches().size() > SendEmail.EMAIL_LIMIT) 
+				return;
+
 		}
 	}
 

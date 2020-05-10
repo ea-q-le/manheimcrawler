@@ -3,9 +3,19 @@ package beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilities.ConfigReader;
+
 public class Vehicle {
 	
+	public static final short YEAR_CRITERIA;
+	static {
+		YEAR_CRITERIA = Short.parseShort(
+				ConfigReader.getProperty("youngerThan"));
+	}
+	
 	private String auction;
+	private String lane;
+	private short year;
 	private String title;
 	private String announcement;
 	
@@ -39,6 +49,18 @@ public class Vehicle {
 		if (announcement.contains("Announcements\n"))
 			announcement = announcement.replace("Announcements\n", "");
 		this.announcement = announcement;
+	}	
+	public String getLane() {
+		return lane;
+	}
+	public void setLane(String lane) {
+		this.lane = lane;
+	}
+	public short getYear() {
+		return year;
+	}
+	public void setYear(short year) {
+		this.year = year;
 	}
 	
 	public static List<Vehicle> getMatches() {
@@ -50,7 +72,7 @@ public class Vehicle {
 	
 	@Override
 	public String toString() {
-		return auction
+		return auction + "\tLane: " + lane
 				+ "\n" + title
 				+ "\nANNOUNCEMENT: " + announcement;
 	}
