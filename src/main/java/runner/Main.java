@@ -3,9 +3,8 @@ package runner;
 import java.util.*;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.NoSuchElementException;
 
-import analyzers.CRAnalyzer;
+import analyzers.*;
 import beans.*;
 import pages.*;
 import utilities.*;
@@ -41,11 +40,11 @@ public class Main {
 		// iterate through each auction vehicle
 		crawler();
 		
-System.out.println(Vehicle.getMatches());
+System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 		// send an email the output String with run date
 		SendEmail.sendEmailTo(
 				ConfigReader.getProperty("recipients"),
-				"Manheim vehicles for the week - Test run on " + todaysDate("MM/dd/yyyy"), 
+				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy"), 
 				Vehicle.printMatches());
 
 		// quit the driver
@@ -81,9 +80,8 @@ System.out.println(Vehicle.getMatches());
 			iterateAuctionCRs(current);
 			
 			// limit vehicle count per the email limitation
-			if (Vehicle.getMatches().size() > SendEmail.EMAIL_LIMIT) 
+			if (Vehicle.getMatches().size() >= SendEmail.EMAIL_LIMIT) 
 				return;
-
 
 			// go back to the Simulcast page to continue the loop
 			Driver.getDriver().navigate().back();
@@ -124,24 +122,28 @@ System.out.println(Vehicle.getMatches());
 				// switch to newly opened Condition Report window
 				Driver.getDriver().switchTo().window(windowHandle);
 
-				// wait for the new window to finish loading
-				waitForLoad(Driver.getDriver());
-
-				// switch to the Frame where vehicle info is stored
-				Driver.getDriver().switchTo().frame("ecrFrame");
-
-				// if vehicle announcement can't be pulled, set it undefined
-				if (!CRAnalyzer.isVersion1(vehicle) &&
-						!CRAnalyzer.isVersion2(vehicle) &&
-							!CRAnalyzer.isVersion3(vehicle))
-					vehicle.setAnnouncement("Undefined");
+				try {
+					// wait for the new window to finish loading
+					waitForLoad(Driver.getDriver());
+	
+					// switch to the Frame where vehicle info is stored
+					Driver.getDriver().switchTo().frame("ecrFrame");
+	
+					// if vehicle announcement can't be pulled, set it undefined
+					if (!CRAnalyzer.isVersion1(vehicle) &&
+							!CRAnalyzer.isVersion2(vehicle) &&
+								!CRAnalyzer.isVersion3(vehicle))
+						vehicle.setAnnouncement("Undefined");
+					
+					// analyze vehicle announcements and add
+					if (matchesAnnouncementSpecs(vehicle))
+						Vehicle.addAMatch(vehicle);				
+				} catch (Exception e) {
+					vehicle.setAnnouncement("Something went wrong...");
+				}
 				
 System.out.println("Current vehicle info: " + vehicle.toString());
 				
-				// analyze vehicle announcements and add
-				if (matchesAnnouncementSpecs(vehicle))
-					Vehicle.addAMatch(vehicle);				
-
 				// close the CR window
 				Driver.getDriver().close();
 
@@ -151,9 +153,8 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 			}
 			
 			// limit vehicle count per the email limitation
-			if (Vehicle.getMatches().size() > SendEmail.EMAIL_LIMIT) 
+			if (Vehicle.getMatches().size() >= SendEmail.EMAIL_LIMIT) 
 				return;
-
 		}
 	}
 

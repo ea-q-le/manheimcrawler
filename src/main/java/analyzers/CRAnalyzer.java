@@ -31,25 +31,6 @@ public class CRAnalyzer {
 		try {
 			// fetch the vehicle information
 			vehicle.setTitle(Driver.getDriver()
-					.findElement(By.className("vehicleSummary"))
-						.getText());
-
-			// fetch the vehicle ANNOUNCEMENTS
-			vehicle.setAnnouncement(Driver.getDriver()
-					.findElement(By.cssSelector(".announcements>td"))
-						.getText());
-			
-			return true;
-		} catch (NoSuchElementException ex) {
-			System.err.println("Element not found, CRAnalyzer v2 failed.");
-			return false;
-		}
-	}
-	
-	public static boolean isVersion3(Vehicle vehicle) {
-		try {
-			// fetch the vehicle information
-			vehicle.setTitle(Driver.getDriver()
 					.findElement(By.cssSelector("td[colspan='3']"))
 						.getText());
 			
@@ -60,9 +41,30 @@ public class CRAnalyzer {
 			
 			return true;
 		} catch (NoSuchElementException e) {
+			System.err.println("Element not found, CRAnalyzer v2 failed.");
+			return false;
+		}
+	}
+	
+	public static boolean isVersion3(Vehicle vehicle) {
+		try {
+			// fetch the vehicle information
+			vehicle.setTitle(Driver.getDriver()
+					.findElement(By.className("vehicleSummary"))
+						.getText());
+
+			// fetch the vehicle ANNOUNCEMENTS
+			vehicle.setAnnouncement(Driver.getDriver()
+					.findElement(By.cssSelector(".announcements>td"))
+						.getText());
+			
+			return true;
+		} catch (NoSuchElementException ex) {
 			System.err.println("Element not found, CRAnalyzer v3 failed.");
 			return false;
 		}
 	}
+	
+	
 
 }

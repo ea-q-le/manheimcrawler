@@ -42,7 +42,7 @@ public class SendEmail {
 			EMAIL_LIMIT = Short.parseShort(
 					ConfigReader.getProperty("emailLimit"));
 	}
-//TODO -> remove print statements below after testing is complete
+
 	public static void sendEmailTo(String to, String subject, String body) {
 		setupEmailServer();
 		try {
