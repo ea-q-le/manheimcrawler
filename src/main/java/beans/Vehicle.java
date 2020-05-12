@@ -7,10 +7,13 @@ import utilities.ConfigReader;
 
 public class Vehicle {
 	
-	public static final short YEAR_CRITERIA;
+	public static final short YEAR_OLDEST;
+	public static final short YEAR_YOUNGEST;
 	static {
-		YEAR_CRITERIA = Short.parseShort(
+		YEAR_OLDEST = Short.parseShort(
 				ConfigReader.getProperty("youngerThan"));
+		YEAR_YOUNGEST = Short.parseShort(
+				ConfigReader.getProperty("olderThan"));
 	}
 	
 	private String auction;

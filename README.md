@@ -4,7 +4,7 @@
 
 ---
 
-##Authors
+## Authors
 
 * **Shahin 'Sean' Gadimov** - *Idea and initial work* [ea-q-le](https://github.com/ea-q-le)
 
@@ -37,11 +37,22 @@ This application is NOT designed for commercial use and should NOT be copied for
 ## Version History
 
 > **Release 0.1** on 5/10/2020
+
 **Release Notes:**
 
 - The complete end-to-end run achieved
 - Email received per given specifications and limitations
 - Common errors and exceptions are handled
+
+> **Release 0.1.1** on 5/12/2020
+
+**Release Notes:**
+
+- Introduced new logic to eliminate vehicles younger than certain year
+- The parameter can be adjusted from `application.config`
+- Additional check was placed to eliminate potential code failure
+  in case year of the vehicle is not advertised.
+  Such vehicles are skipped so that the year is assigned as `-1`.
 
 ---
 

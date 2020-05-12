@@ -36,11 +36,18 @@ public class AuctionPage {
 	 */
 	public static short getVehicleYear(WebElement crLinkElement) {
 		WebElement yearElement = crLinkElement.findElement(By.xpath("../../../td[2]"));
-		String year = yearElement.getText();
+		String yearText = yearElement.getText();
 		
-		if (year == null || year.isEmpty()) return -1;
+		if (yearText == null || yearText.isEmpty()) 
+			return -1;
 		
-		return Short.parseShort(year);
+		short year = -1;
+		try {
+			year = Short.parseShort(yearText); 
+		} catch (NumberFormatException e) {
+			System.err.println("Couldn't fetch the year of the vehicle.");
+		}
+		return year;
 	}
 	
 	/**

@@ -100,7 +100,9 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 			// fetch the vehicle year for compatibility
 			short year = AuctionPage.getVehicleYear(crLinks.get(j)); 
-			if (year < Vehicle.YEAR_CRITERIA) continue;
+			if (year < Vehicle.YEAR_OLDEST ||
+					year > Vehicle.YEAR_YOUNGEST) 
+				continue;
 			vehicle.setYear(year);
 			
 			// fetch vehicle lane information
