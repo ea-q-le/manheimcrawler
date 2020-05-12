@@ -63,15 +63,14 @@ This application is NOT designed for commercial use and should NOT be copied for
     than certain parameter defined in `application.config`
 - Added logic to fetch the vehicle VIN and parse it with a special design
   if the VIN is of correct length.
+- Added logic to analyze vehicle status (whether it is sold or still 
+  available) based on the presence of the 'Proxy bid' element.
+  Currently, vehicles with 'SOLD' status are ignored and no further CR
+  analysis is conducted. This logic can be adjusted in the future.
 
 ---
 
 ## Future Improvements / Work-in-Progress
-  
-> Vehicle status analysis
-
-- Add logic to validate whether the vehicle is already `SOLD`.
-  Current logic does not have any consideration for this.
   
 > Auction analysis
 
@@ -95,6 +94,7 @@ This application is NOT designed for commercial use and should NOT be copied for
   - Vehicle run lane
   - Vehicle run date
   - Vehicle announcements
+  - Vehicle status (available or sold)
 - Logic to implement:
   - Before analyzing the CR of a vehicle, determine
     whether the vehicle is already in the DB (i.e. it has been analyzed before),

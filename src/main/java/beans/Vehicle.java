@@ -26,19 +26,24 @@ public class Vehicle {
 	private int odometer;
 	private String vin;
 	private String announcement;
+	private boolean isAvailable;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
 	public Vehicle() { }
 	public Vehicle(String auction, String lane, 
-			short year, String title, int odometer, 
-			String announcement) {
+			short year, String title, int odometer,
+			String vin,
+			String announcement,
+			boolean isAvailable) {
 		this.auction = auction;
 		this.lane = lane;
 		this.year = year;
 		this.title = title;
 		this.odometer = odometer;
+		this.vin = vin;
 		this.announcement = announcement;
+		this.isAvailable = isAvailable;
 	}
 	
 	public String getAuction() {
@@ -91,6 +96,12 @@ public class Vehicle {
 			announcement = announcement.replace("Announcements\n", "");
 		this.announcement = announcement;
 	}	
+	public boolean getIsAvailable() {
+		return isAvailable;
+	}
+	public void setIsAvailable(boolean isAvailable) {
+		this.isAvailable = isAvailable;
+	}
 		
 	public static List<Vehicle> getMatches() {
 		return matches;
@@ -104,7 +115,8 @@ public class Vehicle {
 		return auction + "\tLane: " + lane
 				+ "\n" + year + " " + title + " w/ " + odometer + " miles"
 				+ "\n[VIN]: " + vin 
-				+ "\n*Announcements*: " + announcement;
+				+ "\n*Announcements*: " + announcement
+				+ ( isAvailable ? "" : "\n***SOLD***" );
 	}
 	
 	public static String printMatches() {

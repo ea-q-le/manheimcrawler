@@ -3,6 +3,7 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -129,6 +130,25 @@ public class AuctionPage {
 		if (lane == null || lane.isEmpty()) return "NOT found";
 		
 		return lane;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the sales status
+	 * and then will try to find fetch proxy bid element, and 
+	 * if found will return true (the vehicle is still available),
+	 * else will return false (the element is replaced, the vehicle is sold).
+	 * @param crLinkElement that is currently in focus
+	 * @return true if proxy element is found, false otherwise
+	 */
+	public static boolean getVehicleIsAvailable(WebElement crLinkElement) {
+		try {
+			crLinkElement.findElement(By.xpath("../../../td[@class='proxyBid']"));
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+		
+		return true;
 	}
 
 }

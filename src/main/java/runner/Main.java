@@ -121,7 +121,12 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			// fetch vehicle lane information
 			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
 			vehicle.setLane(lane);
-
+			
+			// fetch vehicle availability status and continue if SOLD
+			boolean isAvailable = AuctionPage.getVehicleIsAvailable(crLinks.get(j));
+			vehicle.setIsAvailable(isAvailable);
+			if (!isAvailable) continue;
+			
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
 
