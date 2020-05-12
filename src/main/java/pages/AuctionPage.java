@@ -71,6 +71,25 @@ public class AuctionPage {
 	
 	/**
 	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the vehicle VIN
+	 * and then will fetch the text and return it as a String.
+	 * Additional internal condition is added if year box is empty or null
+	 * in which case the method returns n/a.
+	 * @param crLinkElement that is currently in focus
+	 * @return String value of the vehicle VIN
+	 */
+	public static String getVehicleVIN(WebElement crLinkElement) {
+		WebElement vinElement = crLinkElement.findElement(By.xpath("../../span"));
+		String vin = vinElement.getText();
+		
+		if (vin == null || vin.isEmpty()) 
+			return "n/a";
+		
+		return vin;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
 	 * the method will go to its main parent that stores the odometer information
 	 * and then will fetch the text and return it as an int.
 	 * Additional internal condition is added if lane box is empty or null

@@ -61,15 +61,12 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added logic to fetch the vehicle odometer information.
   - Introduced new logic to eliminate vehicles with odometer readings higer
     than certain parameter defined in `application.config`
+- Added logic to fetch the vehicle VIN and parse it with a special design
+  if the VIN is of correct length.
 
 ---
 
 ## Future Improvements / Work-in-Progress
-
-> Vehicle VIN
-
-- Add logic to fetch the vehicle VIN information.
-  Current logic does not have any consideration for this.
   
 > Vehicle status analysis
 
@@ -90,7 +87,8 @@ This application is NOT designed for commercial use and should NOT be copied for
 
 - Information to store:
   - Vehicle unique ID (primary key, auto-increment)
-  - Vehicle year and make/model
+  - Vehicle year 
+  - Vehicle make/model
   - Vehicle VIN
   - Vehicle odometer reading
   - Vehicle auction

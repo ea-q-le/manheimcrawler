@@ -24,6 +24,7 @@ public class Vehicle {
 	private short year;
 	private String title;
 	private int odometer;
+	private String vin;
 	private String announcement;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
@@ -72,6 +73,16 @@ public class Vehicle {
 	public void setOdometer(int odometer) {
 		this.odometer = odometer;
 	}
+	public String getVIN() {
+		return vin;
+	}
+	public void setVIN(String vin) {
+		this.vin = (vin.length() == 17) 
+				? vin.substring(0, 9) + " " 
+					+ vin.substring(9, 11) + " [ "
+					+ vin.substring(11) + " ]"
+				: vin;
+	}
 	public String getAnnouncement() {
 		return announcement;
 	}
@@ -92,6 +103,7 @@ public class Vehicle {
 	public String toString() {
 		return auction + "\tLane: " + lane
 				+ "\n" + year + " " + title + " w/ " + odometer + " miles"
+				+ "\n[VIN]: " + vin 
 				+ "\n*Announcements*: " + announcement;
 	}
 	
