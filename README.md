@@ -6,7 +6,7 @@
 
 ## Authors
 
-* **Shahin 'Sean' Gadimov** - *Idea and initial work* [ea-q-le](https://github.com/ea-q-le)
+* **Shahin 'Sean' Gadimov** - *Idea and initial work* - [ea-q-le](https://github.com/ea-q-le)
 
 ---
 
@@ -54,16 +54,15 @@ This application is NOT designed for commercial use and should NOT be copied for
   in case year of the vehicle is not advertised.
   Such vehicles are skipped so that the year is assigned as `-1`.
 
+- Vehicle title is being fetched from the `Auction` page insted of 
+  from within the CR window. Thus eliminating the need to additional
+  maintenance on the CR window.
+- `Vehicle` to String method is updated accordingly.
+- Code cleanup conducted within the `CRAnalyzer` class.
+
 ---
 
 ## Future Improvements / Work-in-Progress
-
-> Vehicle year analysis
-
-- Add logic to eliminate the vehicles younger than certain age.
-  Current logic only limits the older vehicles per specifications.
-- Update the code to fetch the vehicle information from the `Auction` window.
-  Current logic fetches the information from within the `CR` window.
   
 > Vehicle odometer information
 

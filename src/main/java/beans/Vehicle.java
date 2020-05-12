@@ -76,8 +76,8 @@ public class Vehicle {
 	@Override
 	public String toString() {
 		return auction + "\tLane: " + lane
-				+ "\n" + title
-				+ "\nANNOUNCEMENT: " + announcement;
+				+ "\n" + year + " " + title
+				+ "\n*Announcements*: " + announcement;
 	}
 	
 	public static String printMatches() {

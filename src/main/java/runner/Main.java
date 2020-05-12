@@ -108,6 +108,10 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			// fetch vehicle lane information
 			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
 			vehicle.setLane(lane);
+			
+			// fetch the vehicle title information
+			String title = AuctionPage.getVehicleTitle(crLinks.get(j));
+			vehicle.setTitle(title);
 
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
