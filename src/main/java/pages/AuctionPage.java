@@ -3,6 +3,7 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -36,11 +37,81 @@ public class AuctionPage {
 	 */
 	public static short getVehicleYear(WebElement crLinkElement) {
 		WebElement yearElement = crLinkElement.findElement(By.xpath("../../../td[2]"));
-		String year = yearElement.getText();
+		String yearText = yearElement.getText();
 		
-		if (year == null || year.isEmpty()) return -1;
+		if (yearText == null || yearText.isEmpty()) 
+			return (short)-1;
 		
-		return Short.parseShort(year);
+		short year = -1;
+		try {
+			year = Short.parseShort(yearText); 
+		} catch (NumberFormatException e) {
+			System.err.println("Couldn't fetch the year of the vehicle.");
+		}
+		return year;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the vehicle title
+	 * and then will fetch the text and return it as a String.
+	 * Additional internal condition is added if year box is empty or null
+	 * in which case the method returns Unknown.
+	 * @param crLinkElement that is currently in focus
+	 * @return String value of the vehicle title
+	 */
+	public static String getVehicleTitle(WebElement crLinkElement) {
+		WebElement titleElement = crLinkElement.findElement(By.xpath("../../a"));
+		String title = titleElement.getText();
+		
+		if (title == null || title.isEmpty()) 
+			return "Unknown";
+		
+		return title;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the vehicle VIN
+	 * and then will fetch the text and return it as a String.
+	 * Additional internal condition is added if year box is empty or null
+	 * in which case the method returns n/a.
+	 * @param crLinkElement that is currently in focus
+	 * @return String value of the vehicle VIN
+	 */
+	public static String getVehicleVIN(WebElement crLinkElement) {
+		WebElement vinElement = crLinkElement.findElement(By.xpath("../../span"));
+		String vin = vinElement.getText();
+		
+		if (vin == null || vin.isEmpty()) 
+			return "n/a";
+		
+		return vin;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the odometer information
+	 * and then will fetch the text and return it as an int.
+	 * Additional internal condition is added if lane box is empty or null
+	 * in which case the method returns -1.
+	 * @param crLinkElement that is currently in focus
+	 * @return int value of the vehicle odometer
+	 */
+	public static int getVehicleOdometer(WebElement crLinkElement) {
+		WebElement odoElement = crLinkElement.findElement(By.xpath("../../../td[5]"));
+		String odoText = odoElement.getText();
+		
+		if (odoText == null || odoText.isEmpty()) 
+			return -1;
+		
+		int odometer = -1;
+		try {
+			odometer = Integer.parseInt(odoText); 
+		} catch (NumberFormatException e) {
+			System.err.println("Couldn't fetch the odometer of the vehicle.");
+		}
+		return odometer;
 	}
 	
 	/**
@@ -59,6 +130,25 @@ public class AuctionPage {
 		if (lane == null || lane.isEmpty()) return "NOT found";
 		
 		return lane;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the sales status
+	 * and then will try to find fetch proxy bid element, and 
+	 * if found will return true (the vehicle is still available),
+	 * else will return false (the element is replaced, the vehicle is sold).
+	 * @param crLinkElement that is currently in focus
+	 * @return true if proxy element is found, false otherwise
+	 */
+	public static boolean getVehicleIsAvailable(WebElement crLinkElement) {
+		try {
+			crLinkElement.findElement(By.xpath("../../../td[@class='proxyBid']"));
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+		
+		return true;
 	}
 
 }

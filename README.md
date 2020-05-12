@@ -4,9 +4,9 @@
 
 ---
 
-##Authors
+## Authors
 
-* **Shahin 'Sean' Gadimov** - *Idea and initial work* [ea-q-le](https://github.com/ea-q-le)
+* **Shahin 'Sean' Gadimov** - *Idea and initial work* - [ea-q-le](https://github.com/ea-q-le)
 
 ---
 
@@ -37,32 +37,40 @@ This application is NOT designed for commercial use and should NOT be copied for
 ## Version History
 
 > **Release 0.1** on 5/10/2020
+
 **Release Notes:**
 
 - The complete end-to-end run achieved
 - Email received per given specifications and limitations
 - Common errors and exceptions are handled
 
+> **Release 0.1.1** on 5/12/2020
+
+**Release Notes:**
+
+- Introduced new logic to eliminate vehicles younger than certain year
+  - The parameter can be adjusted from `application.config`
+  - Additional check was placed to eliminate potential code failure
+    in case year of the vehicle is not advertised.
+    Such vehicles are skipped so that the year is assigned as `-1`.
+- Vehicle title is being fetched from the `Auction` page insted of 
+  from within the CR window. Thus eliminating the need to additional
+  maintenance on the CR window.
+  - `Vehicle` to String method is updated accordingly.
+  - Code cleanup conducted within the `CRAnalyzer` class.
+- Added logic to fetch the vehicle odometer information.
+  - Introduced new logic to eliminate vehicles with odometer readings higer
+    than certain parameter defined in `application.config`
+- Added logic to fetch the vehicle VIN and parse it with a special design
+  if the VIN is of correct length.
+- Added logic to analyze vehicle status (whether it is sold or still 
+  available) based on the presence of the 'Proxy bid' element.
+  Currently, vehicles with 'SOLD' status are ignored and no further CR
+  analysis is conducted. This logic can be adjusted in the future.
+
 ---
 
 ## Future Improvements / Work-in-Progress
-
-> Vehicle year analysis
-
-- Add logic to eliminate the vehicles younger than certain age.
-  Current logic only limits the older vehicles per specifications.
-- Update the code to fetch the vehicle information from the `Auction` window.
-  Current logic fetches the information from within the `CR` window.
-  
-> Vehicle odometer information
-
-- Add logic to fetch the vehicle odometer information.
-  Current logic does not have any consideration for this.
-  
-> Vehicle status analysis
-
-- Add logic to validate whether the vehicle is already `SOLD`.
-  Current logic does not have any consideration for this.
   
 > Auction analysis
 
@@ -78,13 +86,15 @@ This application is NOT designed for commercial use and should NOT be copied for
 
 - Information to store:
   - Vehicle unique ID (primary key, auto-increment)
-  - Vehicle year and make/model
+  - Vehicle year 
+  - Vehicle make/model
   - Vehicle VIN
   - Vehicle odometer reading
   - Vehicle auction
   - Vehicle run lane
   - Vehicle run date
   - Vehicle announcements
+  - Vehicle status (available or sold)
 - Logic to implement:
   - Before analyzing the CR of a vehicle, determine
     whether the vehicle is already in the DB (i.e. it has been analyzed before),

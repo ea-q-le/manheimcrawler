@@ -100,13 +100,33 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 			// fetch the vehicle year for compatibility
 			short year = AuctionPage.getVehicleYear(crLinks.get(j)); 
-			if (year < Vehicle.YEAR_CRITERIA) continue;
+			if (year < Vehicle.YEAR_OLDEST ||
+					year > Vehicle.YEAR_YOUNGEST) 
+				continue;
 			vehicle.setYear(year);
+			
+			// fetch the vehicle title information
+			String title = AuctionPage.getVehicleTitle(crLinks.get(j));
+			vehicle.setTitle(title);
+			
+			// fetch the VIN of the vehicle
+			String vin = AuctionPage.getVehicleVIN(crLinks.get(j));
+			vehicle.setVIN(vin);
+			
+			// fetch the vehicle odometer information for compatibility
+			int odometer = AuctionPage.getVehicleOdometer(crLinks.get(j));
+			if (odometer > Vehicle.ODOMETER_MAX) continue;
+			vehicle.setOdometer(odometer);
 			
 			// fetch vehicle lane information
 			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
 			vehicle.setLane(lane);
-
+			
+			// fetch vehicle availability status and continue if SOLD
+			boolean isAvailable = AuctionPage.getVehicleIsAvailable(crLinks.get(j));
+			vehicle.setIsAvailable(isAvailable);
+			if (!isAvailable) continue;
+			
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
 
@@ -124,7 +144,7 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 				try {
 					// wait for the new window to finish loading
-					waitForLoad(Driver.getDriver());
+					waitForLoad();
 	
 					// switch to the Frame where vehicle info is stored
 					Driver.getDriver().switchTo().frame("ecrFrame");
@@ -149,7 +169,6 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 
 				// switch back to the parent window
 				Driver.getDriver().switchTo().window(parentWindow);
-				
 			}
 			
 			// limit vehicle count per the email limitation
