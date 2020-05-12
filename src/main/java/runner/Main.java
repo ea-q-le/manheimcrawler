@@ -105,13 +105,17 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 				continue;
 			vehicle.setYear(year);
 			
-			// fetch vehicle lane information
-			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
-			vehicle.setLane(lane);
-			
 			// fetch the vehicle title information
 			String title = AuctionPage.getVehicleTitle(crLinks.get(j));
 			vehicle.setTitle(title);
+			
+			// fetch the vehicle odometer information
+			int odometer = AuctionPage.getVehicleOdometer(crLinks.get(j));
+			vehicle.setOdometer(odometer);
+			
+			// fetch vehicle lane information
+			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
+			vehicle.setLane(lane);
 
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
@@ -130,7 +134,7 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 				try {
 					// wait for the new window to finish loading
-					waitForLoad(Driver.getDriver());
+					waitForLoad();
 	
 					// switch to the Frame where vehicle info is stored
 					Driver.getDriver().switchTo().frame("ecrFrame");
@@ -155,7 +159,6 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 
 				// switch back to the parent window
 				Driver.getDriver().switchTo().window(parentWindow);
-				
 			}
 			
 			// limit vehicle count per the email limitation

@@ -39,7 +39,7 @@ public class AuctionPage {
 		String yearText = yearElement.getText();
 		
 		if (yearText == null || yearText.isEmpty()) 
-			return -1;
+			return (short)-1;
 		
 		short year = -1;
 		try {
@@ -67,6 +67,31 @@ public class AuctionPage {
 			return "Unknown";
 		
 		return title;
+	}
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the odometer information
+	 * and then will fetch the text and return it as an int.
+	 * Additional internal condition is added if lane box is empty or null
+	 * in which case the method returns -1.
+	 * @param crLinkElement that is currently in focus
+	 * @return int value of the vehicle odometer
+	 */
+	public static int getVehicleOdometer(WebElement crLinkElement) {
+		WebElement odoElement = crLinkElement.findElement(By.xpath("../../../td[5]"));
+		String odoText = odoElement.getText();
+		
+		if (odoText == null || odoText.isEmpty()) 
+			return -1;
+		
+		int odometer = -1;
+		try {
+			odometer = Integer.parseInt(odoText); 
+		} catch (NumberFormatException e) {
+			System.err.println("Couldn't fetch the odometer of the vehicle.");
+		}
+		return odometer;
 	}
 	
 	/**

@@ -60,6 +60,8 @@ This application is NOT designed for commercial use and should NOT be copied for
 - `Vehicle` to String method is updated accordingly.
 - Code cleanup conducted within the `CRAnalyzer` class.
 
+- Added logic to fetch the vehicle odometer information.
+
 ---
 
 ## Future Improvements / Work-in-Progress
@@ -67,6 +69,13 @@ This application is NOT designed for commercial use and should NOT be copied for
 > Vehicle odometer information
 
 - Add logic to fetch the vehicle odometer information.
+  Current logic does not have any consideration for this.
+- Add logic to limit for the max odometer reading.
+  Current logic does not have any consideration for this.
+
+> Vehicle VIN
+
+- Add logic to fetch the vehicle VIN information.
   Current logic does not have any consideration for this.
   
 > Vehicle status analysis
