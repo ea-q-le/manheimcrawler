@@ -9,11 +9,14 @@ public class Vehicle {
 	
 	public static final short YEAR_OLDEST;
 	public static final short YEAR_YOUNGEST;
+	public static final int ODOMETER_MAX;
 	static {
 		YEAR_OLDEST = Short.parseShort(
 				ConfigReader.getProperty("youngerThan"));
 		YEAR_YOUNGEST = Short.parseShort(
 				ConfigReader.getProperty("olderThan"));
+		ODOMETER_MAX = Integer.parseInt(
+				ConfigReader.getProperty("lowerThan"));
 	}
 	
 	private String auction;

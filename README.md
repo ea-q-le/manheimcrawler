@@ -49,29 +49,22 @@ This application is NOT designed for commercial use and should NOT be copied for
 **Release Notes:**
 
 - Introduced new logic to eliminate vehicles younger than certain year
-- The parameter can be adjusted from `application.config`
-- Additional check was placed to eliminate potential code failure
-  in case year of the vehicle is not advertised.
-  Such vehicles are skipped so that the year is assigned as `-1`.
-
+  - The parameter can be adjusted from `application.config`
+  - Additional check was placed to eliminate potential code failure
+    in case year of the vehicle is not advertised.
+    Such vehicles are skipped so that the year is assigned as `-1`.
 - Vehicle title is being fetched from the `Auction` page insted of 
   from within the CR window. Thus eliminating the need to additional
   maintenance on the CR window.
-- `Vehicle` to String method is updated accordingly.
-- Code cleanup conducted within the `CRAnalyzer` class.
-
+  - `Vehicle` to String method is updated accordingly.
+  - Code cleanup conducted within the `CRAnalyzer` class.
 - Added logic to fetch the vehicle odometer information.
+  - Introduced new logic to eliminate vehicles with odometer readings higer
+    than certain parameter defined in `application.config`
 
 ---
 
 ## Future Improvements / Work-in-Progress
-  
-> Vehicle odometer information
-
-- Add logic to fetch the vehicle odometer information.
-  Current logic does not have any consideration for this.
-- Add logic to limit for the max odometer reading.
-  Current logic does not have any consideration for this.
 
 > Vehicle VIN
 

@@ -109,8 +109,9 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			String title = AuctionPage.getVehicleTitle(crLinks.get(j));
 			vehicle.setTitle(title);
 			
-			// fetch the vehicle odometer information
+			// fetch the vehicle odometer information for compatibility
 			int odometer = AuctionPage.getVehicleOdometer(crLinks.get(j));
+			if (odometer > Vehicle.ODOMETER_MAX) continue;
 			vehicle.setOdometer(odometer);
 			
 			// fetch vehicle lane information
