@@ -53,13 +53,13 @@ This application is NOT designed for commercial use and should NOT be copied for
   - Additional check was placed to eliminate potential code failure
     in case year of the vehicle is not advertised.
     Such vehicles are skipped so that the year is assigned as `-1`.
-- Vehicle title is being fetched from the `Auction` page insted of 
-  from within the CR window. Thus eliminating the need to additional
+- Vehicle title is being fetched from the `Auction` page instead of 
+  from within the CR window. Thus eliminating the need for additional
   maintenance on the CR window.
-  - `Vehicle` to String method is updated accordingly.
+  - `Vehicle` toString method is updated accordingly.
   - Code cleanup conducted within the `CRAnalyzer` class.
 - Added logic to fetch the vehicle odometer information.
-  - Introduced new logic to eliminate vehicles with odometer readings higer
+  - Introduced new logic to eliminate vehicles with odometer readings higher
     than certain parameter defined in `application.config`
 - Added logic to fetch the vehicle VIN and parse it with a special design
   if the VIN is of correct length.
@@ -67,6 +67,19 @@ This application is NOT designed for commercial use and should NOT be copied for
   available) based on the presence of the 'Proxy bid' element.
   Currently, vehicles with 'SOLD' status are ignored and no further CR
   analysis is conducted. This logic can be adjusted in the future.
+  
+> **Release 0.1.2** on 5/14/2020
+
+**Release Notes:**
+
+- Performance improvements:
+  - Storing CR links in an ArrayList a size of which is reduced with each iteration
+    to decrease the array complexity in order to achieve future performance enhancements.
+  - Fetching the CR link element only once from the List and reusing it, 
+    thus removing the redundant call to get the element multiple times.
+- Added simple run time calculator to record the time it took for the whole
+  process to complete. This information is being sent out as a part of the subject line
+  of the final email.
 
 ---
 

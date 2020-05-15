@@ -16,6 +16,9 @@ import static analyzers.AuctionAnalyzer.matchesAuctionList;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		// fetch the start time
+		long startTime = System.currentTimeMillis();
 
 		// go to manheim.com
 		HomePage.goToHomePage();
@@ -40,15 +43,23 @@ public class Main {
 		// iterate through each auction vehicle
 		crawler();
 		
-System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
+		// fetching logic completion time
+		long endTime = System.currentTimeMillis();
+		
+		// fetching duration in total seconds
+		long runTimeSeconds = (endTime - startTime) / 1000;
+		
 		// send an email the output String with run date
 		SendEmail.sendEmailTo(
 				ConfigReader.getProperty("recipients"),
-				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy"), 
+				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy")
+				+ "\tTime taken: " + runTimeSeconds + " seconds", 
 				Vehicle.printMatches());
 
 		// quit the driver
 		Driver.getDriver().quit();
+		
+System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 	}
 
 	/** The main method that contains the crawling logic */
@@ -90,40 +101,47 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 	private static void iterateAuctionCRs(String auction) {		
 		// fetch the list of all CR buttons (vehicles with CR)
-		List<WebElement> crLinks = AuctionPage.getCrLinkList();
+		List<WebElement> crLinks = 
+				new ArrayList<WebElement>(AuctionPage.getCrLinkList());
 
 		// for each CR link
 		for (int j = 0; j < crLinks.size(); j++) {
 			// create variables to store vehicle auction, title & announcements
 			Vehicle vehicle = new Vehicle();
 			vehicle.setAuction(auction);
+			
+			// performance enhancements, get element once and remove it right away
+			// decrement to avoid OutOfBounds
+			WebElement currentCRLink = crLinks.get(j);
+			crLinks.remove(j);
+			j--;
 
 			// fetch the vehicle year for compatibility
-			short year = AuctionPage.getVehicleYear(crLinks.get(j)); 
+			short year = AuctionPage.getVehicleYear(currentCRLink); 
 			if (year < Vehicle.YEAR_OLDEST ||
 					year > Vehicle.YEAR_YOUNGEST) 
 				continue;
 			vehicle.setYear(year);
 			
 			// fetch the vehicle title information
-			String title = AuctionPage.getVehicleTitle(crLinks.get(j));
+			String title = AuctionPage.getVehicleTitle(currentCRLink);
 			vehicle.setTitle(title);
 			
 			// fetch the VIN of the vehicle
-			String vin = AuctionPage.getVehicleVIN(crLinks.get(j));
+			String vin = AuctionPage.getVehicleVIN(currentCRLink);
 			vehicle.setVIN(vin);
 			
 			// fetch the vehicle odometer information for compatibility
-			int odometer = AuctionPage.getVehicleOdometer(crLinks.get(j));
+			int odometer = AuctionPage.getVehicleOdometer(currentCRLink);
 			if (odometer > Vehicle.ODOMETER_MAX) continue;
 			vehicle.setOdometer(odometer);
 			
 			// fetch vehicle lane information
-			String lane = AuctionPage.getVehicleLane(crLinks.get(j));
+			String lane = AuctionPage.getVehicleLane(currentCRLink);
 			vehicle.setLane(lane);
 			
 			// fetch vehicle availability status and continue if SOLD
-			boolean isAvailable = AuctionPage.getVehicleIsAvailable(crLinks.get(j));
+			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
 			vehicle.setIsAvailable(isAvailable);
 			if (!isAvailable) continue;
 			
@@ -131,7 +149,7 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			String parentWindow = Driver.getDriver().getWindowHandle();
 
 			// click on the current CR link
-			crLinks.get(j).click();
+			currentCRLink.click();
 			BrowserUtils.waitQt();
 
 			// fetch the newly opened window handle and switch to it
