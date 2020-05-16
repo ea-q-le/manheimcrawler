@@ -85,21 +85,23 @@ This application is NOT designed for commercial use and should NOT be copied for
 
 **Release Notes:**
 
-- Establish connection with a remote MySQL database
-  - DB connection credentials should be stored as environment variables
+- Established connection with a remote MySQL database.
+  - DB connection credentials should be stored as environment variables.
   - MySQL server time-zone is set to 'MSK' which needs to identified by driver configuration
-    (see `DBUtils.createDBConnection()`)
-  - Created `vehicles` table in the server database with the following columns:
-    - id (int, primary key, auto-increment) 
-    - year (int)
-    - make_model (varchar(128))
-    - vin (varchar(32))
-    - odometer (int)
-    - auction (varchar(32))
-    - lane (varchar(16))
-    - run_date (datetime)
-    - announcements (varchar(256))
-    - available (bool)
+    (see `DBUtils.createDBConnection()`).
+- Created `vehicles` table in the server database with the following columns:
+  - id (int, primary key, auto-increment) 
+  - year (int)
+  - make_model (varchar(128))
+  - vin (varchar(32))
+  - odometer (int)
+  - auction (varchar(32))
+  - lane (varchar(16))
+  - run_date (datetime)
+  - announcements (varchar(256))
+  - available (bool)
+- Created `insertIntoVehicles` function add `Vehicle` object into
+  the `vehicles` table within the DB.
     
 ---
 

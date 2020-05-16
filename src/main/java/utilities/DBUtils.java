@@ -4,12 +4,19 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import beans.Vehicle;
+import tables.VehiclesTable;
+
 /**
  * Utility class related to DataBase actions.
  * Includes utilities to create DB connection, destroy DB connection,
  * record outcomes of given queries, etc.
  */
 public class DBUtils {
+	public static final String SCHEMA;
+	static {
+		SCHEMA = ConfigReader.getProperty("db_schema");
+	}
 
     /** private fields necessary for JDBC connection */
     private static Connection connection;
@@ -20,7 +27,13 @@ public class DBUtils {
     public static void main(String[] args) {
 		createDBConnection();
 		
-		System.out.println( getRowCount("select * from umsglobal_manheimcrawler.test;") );
+		VehiclesTable.insertIntoVehicles(
+				new Vehicle("Sample Auction", "1-309", (short)2021, "A very nice car", 148888, "SOMEVIN#HERE", "A lot of words are said and told...", true));
+		
+		System.out.println( getRowCount("select * from umsglobal_manheimcrawler.vehicles;") );
+		System.out.println( getQueryResultMap("select * from umsglobal_manheimcrawler.vehicles;") );
+		
+		destroyDBConnection();
 	}
     
     /**Called by other utilities within and without the class

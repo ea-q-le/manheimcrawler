@@ -1,5 +1,6 @@
 package beans;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Vehicle {
 	private String vin;
 	private String announcement;
 	private boolean isAvailable;
+	private Date runDate;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
@@ -101,6 +103,12 @@ public class Vehicle {
 	}
 	public void setIsAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
+	}
+	public Date getRunDate() {
+		return runDate;
+	}
+	public void setRunDate(Date runDate) {
+		this.runDate = runDate;
 	}
 		
 	public static List<Vehicle> getMatches() {
