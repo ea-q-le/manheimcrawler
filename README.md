@@ -102,6 +102,9 @@ This application is NOT designed for commercial use and should NOT be copied for
   - available (bool)
 - Created `insertIntoVehicles` function add `Vehicle` object into
   the `vehicles` table within the DB.
+- Added logic to fetch and record the current Timestamp the vehicle was
+  found by the `crawler` the very first time. This will allow future
+  DB based manipulations and extractions
     
 ---
 

@@ -1,6 +1,7 @@
 package beans;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +30,16 @@ public class Vehicle {
 	private String announcement;
 	private boolean isAvailable;
 	private Date runDate;
+	private Timestamp foundTimestamp;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
 	public Vehicle() { }
 	public Vehicle(String auction, String lane, 
 			short year, String title, int odometer,
-			String vin,
-			String announcement,
-			boolean isAvailable) {
+			String vin, String announcement, boolean isAvailable,
+			Timestamp foundTimestamp) {
+		
 		this.auction = auction;
 		this.lane = lane;
 		this.year = year;
@@ -46,6 +48,8 @@ public class Vehicle {
 		this.vin = vin;
 		this.announcement = announcement;
 		this.isAvailable = isAvailable;
+		this.foundTimestamp = foundTimestamp;
+		
 	}
 	
 	public String getAuction() {
@@ -109,6 +113,12 @@ public class Vehicle {
 	}
 	public void setRunDate(Date runDate) {
 		this.runDate = runDate;
+	}
+	public Timestamp getFoundTimestamp() {
+		return foundTimestamp;
+	}
+	public void setFoundTimestamp(Timestamp foundTimestamp) {
+		this.foundTimestamp = foundTimestamp;
 	}
 		
 	public static List<Vehicle> getMatches() {

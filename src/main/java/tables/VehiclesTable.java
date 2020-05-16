@@ -2,6 +2,7 @@ package tables;
 
 import java.math.BigInteger;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import beans.Vehicle;
 import utilities.DBUtils;
@@ -11,16 +12,17 @@ public class VehiclesTable {
 	
 	/** VEHICLES 	-> table ddl
 	 * 
-	 * id			-> bigint
+	 * id			-> bigint (primary, auto_increment, not null)
 	 * year			-> int
 	 * make_model	-> varchar(128)
 	 * vin			-> varchar(32)
 	 * odometer		-> int
 	 * auction		-> varchar(32)
 	 * lane			-> varchar(16)
-	 * run_date		-> Datetime
+	 * run_date		-> datetime
 	 * announcements-> varchar(256)
-	 * available	-> bool
+	 * available	-> bool (not null)
+	 * found_date	-> datetime (not null)
 	 */
 	private BigInteger id;
 	private int year;
@@ -32,10 +34,12 @@ public class VehiclesTable {
 	private Date run_date;
 	private String announcements;
 	private boolean available;
+	private Timestamp found_date;
 	
 	public VehiclesTable(int year, String make_model, String vin, 
 			int odometer, String auction, String lane,
-			Date run_date, String announcements, boolean available) {
+			Date run_date, String announcements, boolean available,
+			Timestamp found_date) {
 
 		this.year = year;
 		this.make_model = make_model;
@@ -46,19 +50,12 @@ public class VehiclesTable {
 		this.run_date = run_date;
 		this.announcements = announcements;
 		this.available = available;
+		this.found_date = found_date;
 		
 	}
 
 	public BigInteger getId() {
 		return id;
-	}
-	/** Do NOT set the ID manually,
-	 * it is being auto-incremented within the DB.
-	 * This method is to be used by Object mappers.
-	 * @param id of BigInteger type.
-	 */
-	public void setId(BigInteger id) {
-		this.id = id;
 	}
 	public int getYear() {
 		return year;
@@ -114,20 +111,24 @@ public class VehiclesTable {
 	public void setIsAvailable(boolean available) {
 		this.available = available;
 	}
+	public Timestamp getFound_date() {
+		return found_date;
+	}
 	
 	@Override
 	public String toString() {
 		return "VEHICLES row ["
-				+ " | id:" + id
-				+ " | year:" + year
-				+ " | make_model:" + make_model
-				+ " | vin:" + vin
-				+ " | odometer:" + odometer
-				+ " | auction:" + auction
-				+ " | lane:" + lane
-				+ " | run_date:" + run_date
-				+ " | announcements:" + announcements
-				+ " | available:" + available
+				+ " | id:" + getId()
+				+ " | year:" + getYear()
+				+ " | make_model:" + getMake_model()
+				+ " | vin:" + getVin()
+				+ " | odometer:" + getOdometer()
+				+ " | auction:" + getAuction()
+				+ " | lane:" + getLane()
+				+ " | run_date:" + getRun_date()
+				+ " | announcements:" + getAnnouncements()
+				+ " | available:" + getIsAvailable()
+				+ " | found_date:" + getFound_date().toString()
 				+ " | ]";
 	}
 	
@@ -149,7 +150,8 @@ public class VehiclesTable {
 					vehicle.getLane(), 
 					vehicle.getRunDate(), 
 					vehicle.getAnnouncement(), 
-					vehicle.getIsAvailable() ));
+					vehicle.getIsAvailable(),
+					vehicle.getFoundTimestamp()));
 	}
 	
 	/**
@@ -166,7 +168,8 @@ public class VehiclesTable {
 				+ " (\n" 
 					+ "year, make_model, vin,\n"
 					+ "odometer, auction, lane,\n"
-					+ "run_date, announcements, available)\n"
+					+ "run_date, announcements, available,\n"
+					+ "found_date)\n"
 				+ "VALUES (\n" 
 					+ row.getYear() + ", "
 					+ "\"" + row.getMake_model() + "\"" + ", "
@@ -176,7 +179,8 @@ public class VehiclesTable {
 					+ "\"" + row.getLane() + "\"" + ", "
 					+ row.getRun_date() + ", "
 					+ "\"" + row.getAnnouncements() + "\"" + ", "
-					+ row.getIsAvailable()
+					+ row.getIsAvailable() + ", "
+					+ "\""+ row.getFound_date().toString() + "\""
 				+ ");");
 	}
 

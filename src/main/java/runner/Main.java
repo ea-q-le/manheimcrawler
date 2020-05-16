@@ -1,5 +1,6 @@
 package runner;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import org.openqa.selenium.*;
@@ -7,6 +8,7 @@ import org.openqa.selenium.*;
 import analyzers.*;
 import beans.*;
 import pages.*;
+import tables.VehiclesTable;
 import utilities.*;
 
 import static utilities.BrowserUtils.*;
@@ -40,8 +42,14 @@ public class Main {
 		MyManheimPage.goToNext7Days();
 		waitForLoad();
 
+		// establish DB connection
+		DBUtils.createDBConnection();
+		
 		// iterate through each auction vehicle
 		crawler();
+		
+		// destroy the DB connection
+		DBUtils.destroyDBConnection();
 		
 		// fetching logic completion time
 		long endTime = System.currentTimeMillis();
@@ -187,6 +195,13 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 
 				// switch back to the parent window
 				Driver.getDriver().switchTo().window(parentWindow);
+				
+				// add the found timestamp into the DB table
+				vehicle.setFoundTimestamp(
+						new Timestamp( new Date().getTime() ));
+				
+				// insert the vehicle into the DB table
+				VehiclesTable.insertIntoVehicles(vehicle);
 			}
 			
 			// limit vehicle count per the email limitation

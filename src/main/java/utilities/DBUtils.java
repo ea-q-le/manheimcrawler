@@ -2,6 +2,7 @@ package utilities;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import beans.Vehicle;
@@ -28,7 +29,17 @@ public class DBUtils {
 		createDBConnection();
 		
 		VehiclesTable.insertIntoVehicles(
-				new Vehicle("Sample Auction", "1-309", (short)2021, "A very nice car", 148888, "SOMEVIN#HERE", "A lot of words are said and told...", true));
+				new Vehicle(
+						"Sample Auction", 
+						"1-309", 
+						(short)2021, 
+						"A very nice car", 
+						148888, 
+						"SOMEVIN#HERE", 
+						"A lot of words are said and told...", 
+						true,
+						new Timestamp(new Date().getTime()) 
+						));
 		
 		System.out.println( getRowCount("select * from umsglobal_manheimcrawler.vehicles;") );
 		System.out.println( getQueryResultMap("select * from umsglobal_manheimcrawler.vehicles;") );
