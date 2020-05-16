@@ -80,7 +80,27 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added simple run time calculator to record the time it took for the whole
   process to complete. This information is being sent out as a part of the subject line
   of the final email.
+  
+> **Release.0.2.1** started on 5/15/2020
 
+**Release Notes:**
+
+- Establish connection with a remote MySQL database
+  - DB connection credentials should be stored as environment variables
+  - MySQL server time-zone is set to 'MSK' which needs to identified by driver configuration
+    (see `DBUtils.createDBConnection()`)
+  - Created `vehicles` table in the server database with the following columns:
+    - id (int, primary key, auto-increment) 
+    - year (int)
+    - make_model (varchar(128))
+    - vin (varchar(32))
+    - odometer (int)
+    - auction (varchar(32))
+    - lane (varchar(16))
+    - run_date (datetime)
+    - announcements (varchar(256))
+    - available (bool)
+    
 ---
 
 ## Future Improvements / Work-in-Progress
@@ -97,17 +117,6 @@ This application is NOT designed for commercial use and should NOT be copied for
   
 > Establish a database
 
-- Information to store:
-  - Vehicle unique ID (primary key, auto-increment)
-  - Vehicle year 
-  - Vehicle make/model
-  - Vehicle VIN
-  - Vehicle odometer reading
-  - Vehicle auction
-  - Vehicle run lane
-  - Vehicle run date
-  - Vehicle announcements
-  - Vehicle status (available or sold)
 - Logic to implement:
   - Before analyzing the CR of a vehicle, determine
     whether the vehicle is already in the DB (i.e. it has been analyzed before),
