@@ -81,25 +81,16 @@ This application is NOT designed for commercial use and should NOT be copied for
   process to complete. This information is being sent out as a part of the subject line
   of the final email.
   
-> **Release.0.2.1** started on 5/15/2020
+> **Release.0.2.1** on 5/17/2020
 
 **Release Notes:**
 
 - Established connection with a remote MySQL database.
   - DB connection credentials should be stored as environment variables.
-  - MySQL server time-zone is set to 'MSK' which needs to identified by driver configuration
+  - MySQL server time-zone is set to 'MSK' which needs to defined by driver configuration
     (see `DBUtils.createDBConnection()`).
-- Created `vehicles` table in the server database with the following columns:
-  - id (int, primary key, auto-increment) 
-  - year (int)
-  - make_model (varchar(128))
-  - vin (varchar(32))
-  - odometer (int)
-  - auction (varchar(32))
-  - lane (varchar(16))
-  - run_date (datetime)
-  - announcements (varchar(256))
-  - available (bool)
+- Created `vehicles` table in the server database
+  (see `resources/sql/vehicles.ddl` for table description)
 - Created `insertIntoVehicles` function add `Vehicle` object into
   the `vehicles` table within the DB.
 - Added logic to fetch and record the current Timestamp the vehicle was
@@ -108,17 +99,13 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added logic to fetch and record the Timestamp the vehicle is going to be
   auctioned at under `run_date` column.
 - Added logic to check whether a vehicle already exists in the DB by the
-  given VIN. Email is not sent if exists, otherwise it is sent.
+  given VIN: the vehicle details are not considered to be sent via email 
+  if exists, they are otherwise.
     
 ---
 
 ## Future Improvements / Work-in-Progress
-  
-> Auction analysis
-
-- Add logic to limit an auction per its run date.
-  Current logic only limits an auction by its names and states.
-  
+ 
 > Vehicle CR analysis
 
 - Add logic to eliminate certain keywords from announcements.
