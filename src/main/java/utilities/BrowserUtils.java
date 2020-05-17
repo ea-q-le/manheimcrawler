@@ -82,6 +82,11 @@ public class BrowserUtils {
         wait.until(pageLoadCondition);
     }
 	
+	/**
+	 * Given a DateFormat, returns today's date per the format.
+	 * @param dateFormat the String format to be used
+	 * @return today's date in a given format
+	 */
 	public static String todaysDate(String dateFormat) {
 		DateFormat df = new SimpleDateFormat(dateFormat);
         Calendar cal = Calendar.getInstance();
@@ -89,4 +94,25 @@ public class BrowserUtils {
         return df.format(date);
 	}
 
+	//TODO -> define JavaDocs here
+	public static String runDateTimeExtractor(String webText) {
+		if (webText.toLowerCase().contains("vehicles")) {
+			webText = webText.substring(
+					webText.toLowerCase().indexOf("vehicles")
+					+ "vehicles".length())
+					.trim();
+			
+			if (webText.toLowerCase().contains(" am,"))
+				webText = webText.substring(0, webText.toLowerCase().indexOf(" am,") + 3)
+						.trim();
+			else if (webText.toLowerCase().contains(" pm,"))
+				webText = webText.substring(0, webText.toLowerCase().indexOf(" pm,") + 3)
+						.trim();
+			else return null;
+			
+			return webText.replace(",", "");
+		}
+		
+		return null;
+	}
 }

@@ -1,7 +1,8 @@
 package beans;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,25 +24,26 @@ public class Vehicle {
 	
 	private String auction;
 	private String lane;
+	private Timestamp runTimestamp;
 	private short year;
 	private String title;
 	private int odometer;
 	private String vin;
 	private String announcement;
 	private boolean isAvailable;
-	private Date runDate;
 	private Timestamp foundTimestamp;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
 	public Vehicle() { }
-	public Vehicle(String auction, String lane, 
+	public Vehicle(String auction, String lane, Timestamp runTimestamp,
 			short year, String title, int odometer,
 			String vin, String announcement, boolean isAvailable,
 			Timestamp foundTimestamp) {
 		
 		this.auction = auction;
 		this.lane = lane;
+		this.runTimestamp = runTimestamp;
 		this.year = year;
 		this.title = title;
 		this.odometer = odometer;
@@ -65,6 +67,23 @@ public class Vehicle {
 	}
 	public void setLane(String lane) {
 		this.lane = lane;
+	}
+	public Timestamp getRunTimestamp() {
+		return runTimestamp;
+	}
+	public void setRunTimestamp(Timestamp runTimestamp) {
+		this.runTimestamp = runTimestamp;
+	}
+	public void setRunTimestamp(String runDateTime) {
+		try {
+			this.runTimestamp = new Timestamp(
+					new SimpleDateFormat("MMM dd yyyy hh:mm")
+						.parse(runDateTime)
+						.getTime() );
+		} catch (ParseException e) {
+			e.printStackTrace();
+			this.runTimestamp = null;
+		}
 	}
 	public short getYear() {
 		return year;
@@ -107,12 +126,6 @@ public class Vehicle {
 	}
 	public void setIsAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
-	}
-	public Date getRunDate() {
-		return runDate;
-	}
-	public void setRunDate(Date runDate) {
-		this.runDate = runDate;
 	}
 	public Timestamp getFoundTimestamp() {
 		return foundTimestamp;

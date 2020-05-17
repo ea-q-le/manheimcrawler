@@ -2,11 +2,7 @@ package utilities;
 
 import java.sql.*;
 import java.util.*;
-import java.util.Date;
 import java.util.stream.Collectors;
-
-import beans.Vehicle;
-import tables.VehiclesTable;
 
 /**
  * Utility class related to DataBase actions.
@@ -24,29 +20,6 @@ public class DBUtils {
     private static Statement statement;
     private static ResultSet resultSet;
 
-//TODO -> remove the main method after local tests are complete
-    public static void main(String[] args) {
-		createDBConnection();
-		
-		VehiclesTable.insertIntoVehicles(
-				new Vehicle(
-						"Sample Auction", 
-						"1-309", 
-						(short)2021, 
-						"A very nice car", 
-						148888, 
-						"SOMEVIN#HERE", 
-						"A lot of words are said and told...", 
-						true,
-						new Timestamp(new Date().getTime()) 
-						));
-		
-		System.out.println( getRowCount("select * from umsglobal_manheimcrawler.vehicles;") );
-		System.out.println( getQueryResultMap("select * from umsglobal_manheimcrawler.vehicles;") );
-		
-		destroyDBConnection();
-	}
-    
     /**Called by other utilities within and without the class
      * Executes the query given as String
      * Executes 'SELECT' queries only.

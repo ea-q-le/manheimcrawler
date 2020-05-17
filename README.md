@@ -105,6 +105,8 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added logic to fetch and record the current Timestamp the vehicle was
   found by the `crawler` the very first time. This will allow future
   DB based manipulations and extractions
+- Added logic to fetch and record the Timestamp the vehicle is going to be
+  auctioned at under `run_date` column.
     
 ---
 
@@ -120,19 +122,26 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Add logic to eliminate certain keywords from announcements.
   Current logic does not have elimination clause, only inclusion.
   
-> Establish a database
+> Database Enhancements
 
 - Logic to implement:
   - Before analyzing the CR of a vehicle, determine
     whether the vehicle is already in the DB (i.e. it has been analyzed before),
     if yes, then ignore it,
     else, analyze the vehicle and add it to the DB.
-  - Fetch the information on stored vehicles upon request.
+- Database maintenance > the following need to be considered before each
+  run in order to maintenance the health and size of the DB:
+  - Removing vehicles `run_date` of which is older than 7 days from today
+  - Removing vehicles that are not `available` more than 3 days from today
+  - Creating additional tables to and storing commonly queried data there
+    for lookups instead of loading a single `vehicles` table
   
 > Advanced features
 
-  - Ability to fetch MMR information
-  - Ability to place proxy bid(s)
+- Ability to fetch MMR information
+- Ability to place proxy bid(s)
+- Additional thought needs to be given into potentially removing data
+  analysis logic into **another independent service**.
   
 ---
 

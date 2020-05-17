@@ -1,7 +1,6 @@
 package tables;
 
 import java.math.BigInteger;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import beans.Vehicle;
@@ -31,14 +30,14 @@ public class VehiclesTable {
 	private int odometer;
 	private String auction;
 	private String lane;
-	private Date run_date;
+	private Timestamp run_date;
 	private String announcements;
 	private boolean available;
 	private Timestamp found_date;
 	
 	public VehiclesTable(int year, String make_model, String vin, 
 			int odometer, String auction, String lane,
-			Date run_date, String announcements, boolean available,
+			Timestamp run_date, String announcements, boolean available,
 			Timestamp found_date) {
 
 		this.year = year;
@@ -93,10 +92,10 @@ public class VehiclesTable {
 	public void setLane(String lane) {
 		this.lane = lane;
 	}
-	public Date getRun_date() {
+	public Timestamp getRun_date() {
 		return run_date;
 	}
-	public void setRun_date(Date run_date) {
+	public void setRun_date(Timestamp run_date) {
 		this.run_date = run_date;
 	}
 	public String getAnnouncements() {
@@ -148,7 +147,7 @@ public class VehiclesTable {
 					vehicle.getOdometer(), 
 					vehicle.getAuction(), 
 					vehicle.getLane(), 
-					vehicle.getRunDate(), 
+					vehicle.getRunTimestamp(), 
 					vehicle.getAnnouncement(), 
 					vehicle.getIsAvailable(),
 					vehicle.getFoundTimestamp()));
@@ -177,10 +176,10 @@ public class VehiclesTable {
 					+ row.getOdometer() + ", "
 					+ "\"" + row.getAuction() + "\"" + ", "
 					+ "\"" + row.getLane() + "\"" + ", "
-					+ row.getRun_date() + ", "
+					+ "\"" + row.getRun_date() + "\"" + ", "
 					+ "\"" + row.getAnnouncements() + "\"" + ", "
 					+ row.getIsAvailable() + ", "
-					+ "\""+ row.getFound_date().toString() + "\""
+					+ "\"" + row.getFound_date().toString() + "\""
 				+ ");");
 	}
 

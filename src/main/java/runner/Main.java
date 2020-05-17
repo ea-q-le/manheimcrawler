@@ -130,6 +130,20 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 					year > Vehicle.YEAR_YOUNGEST) 
 				continue;
 			vehicle.setYear(year);
+						
+			// fetch the vehicle odometer information for compatibility
+			int odometer = AuctionPage.getVehicleOdometer(currentCRLink);
+			if (odometer > Vehicle.ODOMETER_MAX) continue;
+			vehicle.setOdometer(odometer);
+			
+			// fetch vehicle availability status and continue if SOLD
+			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
+			vehicle.setIsAvailable(isAvailable);
+			if (!isAvailable) continue;
+
+			// fetch the vehicle run date and time
+			String runDateTime = AuctionPage.getVehicleRunDateTime(currentCRLink);
+			vehicle.setRunTimestamp(runDateTime);
 			
 			// fetch the vehicle title information
 			String title = AuctionPage.getVehicleTitle(currentCRLink);
@@ -139,19 +153,9 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			String vin = AuctionPage.getVehicleVIN(currentCRLink);
 			vehicle.setVIN(vin);
 			
-			// fetch the vehicle odometer information for compatibility
-			int odometer = AuctionPage.getVehicleOdometer(currentCRLink);
-			if (odometer > Vehicle.ODOMETER_MAX) continue;
-			vehicle.setOdometer(odometer);
-			
 			// fetch vehicle lane information
 			String lane = AuctionPage.getVehicleLane(currentCRLink);
 			vehicle.setLane(lane);
-			
-			// fetch vehicle availability status and continue if SOLD
-			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
-			vehicle.setIsAvailable(isAvailable);
-			if (!isAvailable) continue;
 			
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
@@ -196,7 +200,8 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 				// switch back to the parent window
 				Driver.getDriver().switchTo().window(parentWindow);
 				
-				// add the found timestamp into the DB table
+				// add the found current timestamp as 
+				// the found_date into the DB table
 				vehicle.setFoundTimestamp(
 						new Timestamp( new Date().getTime() ));
 				
