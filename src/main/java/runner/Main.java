@@ -16,6 +16,8 @@ import static analyzers.AnnouncementSpecsAnalyzer.matchesAnnouncementSpecs;
 import static analyzers.AuctionAnalyzer.matchesAuctionList;
 
 public class Main {
+	
+	private static int processedVehicleCount;
 
 	public static void main(String[] args) {
 		
@@ -61,7 +63,8 @@ public class Main {
 		SendEmail.sendEmailTo(
 				ConfigReader.getProperty("recipients"),
 				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy")
-				+ "\tTime taken: " + runTimeSeconds + " seconds", 
+					+ "\tTime taken: " + runTimeSeconds + " seconds"
+					+ "\tVehicles processed: " + processedVehicleCount, 
 				Vehicle.printMatches());
 
 		// quit the driver
@@ -114,6 +117,9 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 		// for each CR link
 		for (int j = 0; j < crLinks.size(); j++) {
+			// record the number of vehicles the program has analyzed
+			processedVehicleCount++;
+			
 			// create variables to store vehicle auction, title & announcements
 			Vehicle vehicle = new Vehicle();
 			vehicle.setAuction(auction);
@@ -141,6 +147,12 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			vehicle.setIsAvailable(isAvailable);
 			if (!isAvailable) continue;
 
+			// fetch the VIN of the vehicle
+			String vin = AuctionPage.getVehicleVIN(currentCRLink);
+			vehicle.setVIN(vin);
+			if (VehiclesTable.vehicleExistsByVIN(vehicle.getVIN()))
+				continue;
+			
 			// fetch the vehicle run date and time
 			String runDateTime = AuctionPage.getVehicleRunDateTime(currentCRLink);
 			vehicle.setRunTimestamp(runDateTime);
@@ -148,10 +160,6 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			// fetch the vehicle title information
 			String title = AuctionPage.getVehicleTitle(currentCRLink);
 			vehicle.setTitle(title);
-			
-			// fetch the VIN of the vehicle
-			String vin = AuctionPage.getVehicleVIN(currentCRLink);
-			vehicle.setVIN(vin);
 			
 			// fetch vehicle lane information
 			String lane = AuctionPage.getVehicleLane(currentCRLink);

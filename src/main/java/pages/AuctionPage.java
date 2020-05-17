@@ -43,11 +43,9 @@ public class AuctionPage {
 		WebElement laneElement = crLinkElement.findElement(
 				By.xpath("../../../../../..//div[@class=\"saleInfo\"]//div[@class=\"content\"]"));
 		String laneText = laneElement.getText();
-System.out.println(laneText);
 		
 		if (laneText == null || laneText.isEmpty()) 
 			return "Jan 1, 2000 08:00";
-System.out.println(laneText);
 		
 		String runDateTime = "";
 		try {

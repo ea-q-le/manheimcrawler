@@ -19,7 +19,7 @@ public class DBUtils {
     private static Connection connection;
     private static Statement statement;
     private static ResultSet resultSet;
-
+    
     /**Called by other utilities within and without the class
      * Executes the query given as String
      * Executes 'SELECT' queries only.
@@ -142,8 +142,7 @@ public class DBUtils {
 
     /**Given a query has already been run against the DB,
      * returns the count of rows in the ResultSet
-     * @return an int of row count or -1
-     *         return of -1 means there is no
+     * @return an int of row count or -1 if caught an exception
      */
     public static int getRowCount() {
         int rowCount = -1;
@@ -152,9 +151,8 @@ public class DBUtils {
             rowCount = resultSet.getRow();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            return rowCount;
         }
+        return rowCount;
     }
 
 

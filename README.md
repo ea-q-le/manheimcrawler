@@ -107,6 +107,8 @@ This application is NOT designed for commercial use and should NOT be copied for
   DB based manipulations and extractions
 - Added logic to fetch and record the Timestamp the vehicle is going to be
   auctioned at under `run_date` column.
+- Added logic to check whether a vehicle already exists in the DB by the
+  given VIN. Email is not sent if exists, otherwise it is sent.
     
 ---
 
@@ -125,10 +127,10 @@ This application is NOT designed for commercial use and should NOT be copied for
 > Database Enhancements
 
 - Logic to implement:
-  - Before analyzing the CR of a vehicle, determine
-    whether the vehicle is already in the DB (i.e. it has been analyzed before),
-    if yes, then ignore it,
-    else, analyze the vehicle and add it to the DB.
+  - If a vehicle is discovered to already exist in the DB, build logic
+    and possibly additional tables to store the changes to the vehicle
+    data, if any. *Current implementation* simply skips the vehicle from
+    further consideration.
 - Database maintenance > the following need to be considered before each
   run in order to maintenance the health and size of the DB:
   - Removing vehicles `run_date` of which is older than 7 days from today

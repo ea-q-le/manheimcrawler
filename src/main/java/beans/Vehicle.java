@@ -144,12 +144,18 @@ public class Vehicle {
 	@Override
 	public String toString() {
 		return auction + "\tLane: " + lane
+				+ "\nTO BE SOLD ON --date and time--: " + runTimestamp
 				+ "\n" + year + " " + title + " w/ " + odometer + " miles"
 				+ "\n[VIN]: " + vin 
 				+ "\n*Announcements*: " + announcement
-				+ ( isAvailable ? "" : "\n***SOLD***" );
+				+ ( isAvailable ? "" : "\n***Ignore... It is already SOLD***" );
 	}
 	
+	/**
+	 * Implicitly calls toString() method on each Vehicle object stored
+	 * within the 'List<Vehicle> matches' of the Vehicle class as a String.
+	 * @return String representation of all Vehicle objects within the 'matches' List
+	 */
 	public static String printMatches() {
 		StringBuilder retStrb = new StringBuilder();
 		

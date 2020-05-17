@@ -94,7 +94,15 @@ public class BrowserUtils {
         return df.format(date);
 	}
 
-	//TODO -> define JavaDocs here
+	/**
+	 * Given a text parameter fetched from the Auction page as
+	 * 'WALDORF MOBILE SALE (OPEN) 46 vehicles  May 18, 2020  10:20 AM, EDT'
+	 * this specific method extracts the date as
+	 * 'May 18 2020  10:20 AM' as the time format of 'MMM dd yyyy hh:mm'
+	 * in order to be further parsed into a Timestamp
+	 * @param webText as a special String format shown above
+	 * @return String of date extracted from the text in the given format
+	 */
 	public static String runDateTimeExtractor(String webText) {
 		if (webText.toLowerCase().contains("vehicles")) {
 			webText = webText.substring(

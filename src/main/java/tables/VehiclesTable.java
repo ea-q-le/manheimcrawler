@@ -183,4 +183,24 @@ public class VehiclesTable {
 				+ ");");
 	}
 
+	/**
+	 * Given a VIN of a Vehicle object as a String,
+	 * the method returns whether that VIN is present in the
+	 * 'vehicles' table within the database.
+	 * IMPORTANT: The VIN should be passed in the way it is 
+	 * formatted the first time. Hence it is necessary to utilize
+	 * the getVIN() instead of passing the String fetched from the site.
+	 * @param vin fetched using a vehicle object's getVIN()  
+	 * @return boolean value whether the given vin exists in 'vehicles' table
+	 */
+	public static boolean vehicleExistsByVIN(String vin) {
+		return (DBUtils.getRowCount(
+				"SELECT *\n"
+				+ "FROM " 
+						+ DBUtils.SCHEMA + "." 
+						+ VehiclesTable.TABLE_NAME + "\n"
+				+ "WHERE "
+					+ "vin = \"" + vin + "\";")
+				) > 0;
+	}
 }
