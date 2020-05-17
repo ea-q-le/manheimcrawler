@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 
+import utilities.BrowserUtils;
 import utilities.Driver;
 
 public class AuctionPage {
@@ -24,6 +25,35 @@ public class AuctionPage {
 	
 	public static List<WebElement> getCrLinkList() {
 		return new AuctionPage().crLinkList;
+	}
+	
+	
+	/**
+	 * Given a current CR Link Element that is in the focus
+	 * the method will go to its main parent that stores the Lane information
+	 * and then will fetch the text and return it as a String.
+	 * The method implicitly calls the BrowserUtils.runDateTimeExtractor
+	 * to remove unnecessary text and format the output String.
+	 * Additional internal condition is added if year box is empty or null
+	 * in which case the method returns 'Jan 1, 2000 08:00'.
+	 * @param crLinkElement that is currently in focus
+	 * @return String value of the vehicle run date and time
+	 */
+	public static String getVehicleRunDateTime(WebElement crLinkElement) {
+		WebElement laneElement = crLinkElement.findElement(
+				By.xpath("../../../../../..//div[@class=\"saleInfo\"]//div[@class=\"content\"]"));
+		String laneText = laneElement.getText();
+		
+		if (laneText == null || laneText.isEmpty()) 
+			return "Jan 1, 2000 08:00";
+		
+		String runDateTime = "";
+		try {
+			runDateTime = BrowserUtils.runDateTimeExtractor(laneText); 
+		} catch (NumberFormatException e) {
+			System.err.println("Couldn't fetch the run date and time of the vehicle.");
+		}
+		return runDateTime;
 	}
 	
 	/**

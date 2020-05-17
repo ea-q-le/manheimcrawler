@@ -1,5 +1,6 @@
 package runner;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 import org.openqa.selenium.*;
@@ -7,6 +8,7 @@ import org.openqa.selenium.*;
 import analyzers.*;
 import beans.*;
 import pages.*;
+import tables.VehiclesTable;
 import utilities.*;
 
 import static utilities.BrowserUtils.*;
@@ -14,6 +16,8 @@ import static analyzers.AnnouncementSpecsAnalyzer.matchesAnnouncementSpecs;
 import static analyzers.AuctionAnalyzer.matchesAuctionList;
 
 public class Main {
+	
+	private static int processedVehicleCount;
 
 	public static void main(String[] args) {
 		
@@ -40,8 +44,14 @@ public class Main {
 		MyManheimPage.goToNext7Days();
 		waitForLoad();
 
+		// establish DB connection
+		DBUtils.createDBConnection();
+		
 		// iterate through each auction vehicle
 		crawler();
+		
+		// destroy the DB connection
+		DBUtils.destroyDBConnection();
 		
 		// fetching logic completion time
 		long endTime = System.currentTimeMillis();
@@ -53,7 +63,8 @@ public class Main {
 		SendEmail.sendEmailTo(
 				ConfigReader.getProperty("recipients"),
 				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy")
-				+ "\tTime taken: " + runTimeSeconds + " seconds", 
+					+ "\tTime taken: " + runTimeSeconds + " seconds"
+					+ "\tVehicles processed: " + processedVehicleCount, 
 				Vehicle.printMatches());
 
 		// quit the driver
@@ -106,6 +117,9 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 
 		// for each CR link
 		for (int j = 0; j < crLinks.size(); j++) {
+			// record the number of vehicles the program has analyzed
+			processedVehicleCount++;
+			
 			// create variables to store vehicle auction, title & announcements
 			Vehicle vehicle = new Vehicle();
 			vehicle.setAuction(auction);
@@ -122,28 +136,34 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 					year > Vehicle.YEAR_YOUNGEST) 
 				continue;
 			vehicle.setYear(year);
-			
-			// fetch the vehicle title information
-			String title = AuctionPage.getVehicleTitle(currentCRLink);
-			vehicle.setTitle(title);
-			
-			// fetch the VIN of the vehicle
-			String vin = AuctionPage.getVehicleVIN(currentCRLink);
-			vehicle.setVIN(vin);
-			
+						
 			// fetch the vehicle odometer information for compatibility
 			int odometer = AuctionPage.getVehicleOdometer(currentCRLink);
 			if (odometer > Vehicle.ODOMETER_MAX) continue;
 			vehicle.setOdometer(odometer);
 			
-			// fetch vehicle lane information
-			String lane = AuctionPage.getVehicleLane(currentCRLink);
-			vehicle.setLane(lane);
-			
 			// fetch vehicle availability status and continue if SOLD
 			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
 			vehicle.setIsAvailable(isAvailable);
 			if (!isAvailable) continue;
+
+			// fetch the VIN of the vehicle
+			String vin = AuctionPage.getVehicleVIN(currentCRLink);
+			vehicle.setVIN(vin);
+			if (VehiclesTable.vehicleExistsByVIN(vehicle.getVIN()))
+				continue;
+			
+			// fetch the vehicle run date and time
+			String runDateTime = AuctionPage.getVehicleRunDateTime(currentCRLink);
+			vehicle.setRunTimestamp(runDateTime);
+			
+			// fetch the vehicle title information
+			String title = AuctionPage.getVehicleTitle(currentCRLink);
+			vehicle.setTitle(title);
+			
+			// fetch vehicle lane information
+			String lane = AuctionPage.getVehicleLane(currentCRLink);
+			vehicle.setLane(lane);
 			
 			// store current window information
 			String parentWindow = Driver.getDriver().getWindowHandle();
@@ -187,6 +207,14 @@ System.out.println("Current vehicle info: " + vehicle.toString());
 
 				// switch back to the parent window
 				Driver.getDriver().switchTo().window(parentWindow);
+				
+				// add the found current timestamp as 
+				// the found_date into the DB table
+				vehicle.setFoundTimestamp(
+						new Timestamp( new Date().getTime() ));
+				
+				// insert the vehicle into the DB table
+				VehiclesTable.insertIntoVehicles(vehicle);
 			}
 			
 			// limit vehicle count per the email limitation

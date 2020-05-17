@@ -1,5 +1,8 @@
 package beans;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,29 +24,34 @@ public class Vehicle {
 	
 	private String auction;
 	private String lane;
+	private Timestamp runTimestamp;
 	private short year;
 	private String title;
 	private int odometer;
 	private String vin;
 	private String announcement;
 	private boolean isAvailable;
+	private Timestamp foundTimestamp;
 	
 	private static List<Vehicle> matches = new ArrayList<Vehicle>();
 	
 	public Vehicle() { }
-	public Vehicle(String auction, String lane, 
+	public Vehicle(String auction, String lane, Timestamp runTimestamp,
 			short year, String title, int odometer,
-			String vin,
-			String announcement,
-			boolean isAvailable) {
+			String vin, String announcement, boolean isAvailable,
+			Timestamp foundTimestamp) {
+		
 		this.auction = auction;
 		this.lane = lane;
+		this.runTimestamp = runTimestamp;
 		this.year = year;
 		this.title = title;
 		this.odometer = odometer;
 		this.vin = vin;
 		this.announcement = announcement;
 		this.isAvailable = isAvailable;
+		this.foundTimestamp = foundTimestamp;
+		
 	}
 	
 	public String getAuction() {
@@ -59,6 +67,23 @@ public class Vehicle {
 	}
 	public void setLane(String lane) {
 		this.lane = lane;
+	}
+	public Timestamp getRunTimestamp() {
+		return runTimestamp;
+	}
+	public void setRunTimestamp(Timestamp runTimestamp) {
+		this.runTimestamp = runTimestamp;
+	}
+	public void setRunTimestamp(String runDateTime) {
+		try {
+			this.runTimestamp = new Timestamp(
+					new SimpleDateFormat("MMM dd yyyy hh:mm")
+						.parse(runDateTime)
+						.getTime() );
+		} catch (ParseException e) {
+			e.printStackTrace();
+			this.runTimestamp = null;
+		}
 	}
 	public short getYear() {
 		return year;
@@ -102,6 +127,12 @@ public class Vehicle {
 	public void setIsAvailable(boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
+	public Timestamp getFoundTimestamp() {
+		return foundTimestamp;
+	}
+	public void setFoundTimestamp(Timestamp foundTimestamp) {
+		this.foundTimestamp = foundTimestamp;
+	}
 		
 	public static List<Vehicle> getMatches() {
 		return matches;
@@ -113,12 +144,18 @@ public class Vehicle {
 	@Override
 	public String toString() {
 		return auction + "\tLane: " + lane
+				+ "\nTO BE SOLD ON --date and time--: " + runTimestamp
 				+ "\n" + year + " " + title + " w/ " + odometer + " miles"
 				+ "\n[VIN]: " + vin 
 				+ "\n*Announcements*: " + announcement
-				+ ( isAvailable ? "" : "\n***SOLD***" );
+				+ ( isAvailable ? "" : "\n***Ignore... It is already SOLD***" );
 	}
 	
+	/**
+	 * Implicitly calls toString() method on each Vehicle object stored
+	 * within the 'List<Vehicle> matches' of the Vehicle class as a String.
+	 * @return String representation of all Vehicle objects within the 'matches' List
+	 */
 	public static String printMatches() {
 		StringBuilder retStrb = new StringBuilder();
 		

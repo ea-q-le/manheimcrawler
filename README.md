@@ -80,45 +80,57 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added simple run time calculator to record the time it took for the whole
   process to complete. This information is being sent out as a part of the subject line
   of the final email.
+  
+> **Release.0.2.1** on 5/17/2020
 
+**Release Notes:**
+
+- Established connection with a remote MySQL database.
+  - DB connection credentials should be stored as environment variables.
+  - MySQL server time-zone is set to 'MSK' which needs to defined by driver configuration
+    (see `DBUtils.createDBConnection()`).
+- Created `vehicles` table in the server database
+  (see `resources/sql/vehicles.ddl` for table description)
+- Created `insertIntoVehicles` function add `Vehicle` object into
+  the `vehicles` table within the DB.
+- Added logic to fetch and record the current Timestamp the vehicle was
+  found by the `crawler` the very first time. This will allow future
+  DB based manipulations and extractions
+- Added logic to fetch and record the Timestamp the vehicle is going to be
+  auctioned at under `run_date` column.
+- Added logic to check whether a vehicle already exists in the DB by the
+  given VIN: the vehicle details are not considered to be sent via email 
+  if exists, they are otherwise.
+    
 ---
 
 ## Future Improvements / Work-in-Progress
-  
-> Auction analysis
-
-- Add logic to limit an auction per its run date.
-  Current logic only limits an auction by its names and states.
-  
+ 
 > Vehicle CR analysis
 
 - Add logic to eliminate certain keywords from announcements.
   Current logic does not have elimination clause, only inclusion.
   
-> Establish a database
+> Database Enhancements
 
-- Information to store:
-  - Vehicle unique ID (primary key, auto-increment)
-  - Vehicle year 
-  - Vehicle make/model
-  - Vehicle VIN
-  - Vehicle odometer reading
-  - Vehicle auction
-  - Vehicle run lane
-  - Vehicle run date
-  - Vehicle announcements
-  - Vehicle status (available or sold)
 - Logic to implement:
-  - Before analyzing the CR of a vehicle, determine
-    whether the vehicle is already in the DB (i.e. it has been analyzed before),
-    if yes, then ignore it,
-    else, analyze the vehicle and add it to the DB.
-  - Fetch the information on stored vehicles upon request.
+  - If a vehicle is discovered to already exist in the DB, build logic
+    and possibly additional tables to store the changes to the vehicle
+    data, if any. *Current implementation* simply skips the vehicle from
+    further consideration.
+- Database maintenance > the following need to be considered before each
+  run in order to maintenance the health and size of the DB:
+  - Removing vehicles `run_date` of which is older than 7 days from today
+  - Removing vehicles that are not `available` more than 3 days from today
+  - Creating additional tables to and storing commonly queried data there
+    for lookups instead of loading a single `vehicles` table
   
 > Advanced features
 
-  - Ability to fetch MMR information
-  - Ability to place proxy bid(s)
+- Ability to fetch MMR information
+- Ability to place proxy bid(s)
+- Additional thought needs to be given into potentially removing data
+  analysis logic into **another independent service**.
   
 ---
 
