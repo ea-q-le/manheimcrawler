@@ -1,5 +1,8 @@
 [	
 	{
+		"content" : "no start"
+	},
+	{
 		"content" : "no key"
 	},
 	{
@@ -15,13 +18,16 @@
 		"content" : "ecm"
 	},
 	{
+		"content" : "bcm code"
+	},
+	{
 		"content" : "tranny computer"
 	},
 	{
 		"content" : "transmission"
 	},
 	{
-		"content" : "trans slips"
+		"content" : "trans slip"
 	},
 	{
 		"content" : "trans hard"
@@ -33,6 +39,9 @@
 		"content" : "trans whine"
 	},
 	{
+		"content" : "trans issue"
+	},
+	{
 		"content" : "trans over"
 	},
 	{
@@ -40,6 +49,12 @@
 	},
 	{
 		"content" : "caut trans"
+	},
+	{
+		"content" : "trans code"
+	},
+	{
+		"content" : "trans shutter"
 	},
 	{
 		"content" : "bad engine"
@@ -60,10 +75,34 @@
 		"content" : "eng nse"
 	},
 	{
-		"content" : "engine issues"
+		"content" : "engine issue"
+	},
+	{
+		"content" : "engine problem"
 	},
 	{
 		"content" : "engine sludge"
+	},
+	{
+		"content" : "check engine"
+	},
+	{
+		"content" : "check eng"
+	},
+	{
+		"content" : "ck eng"
+	},
+	{
+		"content" : "eng lt"
+	},
+	{
+		"content" : "engine lit"
+	},
+	{
+		"content" : "sludge"
+	},
+	{
+		"content" : "bad turbo"
 	},
 	{
 		"content" : "tick"
@@ -93,9 +132,6 @@
 		"content" : "computer"
 	},
 	{
-		"content" : "elect"
-	},
-	{
 		"content" : "flood"
 	},
 	{
@@ -109,5 +145,14 @@
 	},
 	{
 		"content" : "srs issues"
+	},
+	{
+		"content" : "air bag codes"
+	},
+	{
+		"content" : "airbag lt"
+	},
+	{
+		"content": "srs light"
 	}
 ]

@@ -74,7 +74,15 @@ public class DBUtils {
                 + "?useUnicode=true"
                 + "&useJDBCCompliantTimezoneShift=true"
                 + "&useLegacyDatetimeCode=false"
-                + "&serverTimezone=Europe/Moscow";
+                + "&serverTimezone=Europe/Moscow"
+                + "&autoReconnect=true"
+                + "&sessionVariables="
+                	+ "sql_mode='STRICT_TRANS_TABLES,"
+                		+ "NO_AUTO_CREATE_USER,"
+                		+ "NO_ENGINE_SUBSTITUTION,"
+                		+ "PAD_CHAR_TO_FULL_LENGTH',"
+                		+ "interactive_timeout=2147483,"
+                		+ "wait_timeout=2147483";
         String user = System.getenv("db_username");
         String password = System.getenv("db_password");
 
