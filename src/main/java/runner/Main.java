@@ -141,11 +141,6 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			int odometer = AuctionPage.getVehicleOdometer(currentCRLink);
 			if (odometer > Vehicle.ODOMETER_MAX) continue;
 			vehicle.setOdometer(odometer);
-			
-			// fetch vehicle availability status and continue if SOLD
-			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
-			vehicle.setIsAvailable(isAvailable);
-			if (!isAvailable) continue;
 
 			// fetch the VIN of the vehicle
 			String vin = AuctionPage.getVehicleVIN(currentCRLink);
@@ -153,6 +148,11 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			if (VehiclesTable.vehicleExistsByVIN(vehicle.getVIN()))
 				continue;
 			
+			// fetch vehicle availability status and continue if SOLD
+			boolean isAvailable = AuctionPage.getVehicleIsAvailable(currentCRLink);
+			vehicle.setIsAvailable(isAvailable);
+			if (!isAvailable) continue;
+
 			// fetch the vehicle run date and time
 			String runDateTime = AuctionPage.getVehicleRunDateTime(currentCRLink);
 			vehicle.setRunTimestamp(runDateTime);
