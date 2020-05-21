@@ -119,6 +119,10 @@ public class Vehicle {
 	public void setAnnouncement(String announcement) {
 		if (announcement.contains("Announcements\n"))
 			announcement = announcement.replace("Announcements\n", "");
+		if (announcement.contains("\""))
+			announcement = announcement.replace("\"", " ");
+		if (announcement.contains("'"))
+			announcement = announcement.replace("'", "");
 		this.announcement = announcement;
 	}	
 	public boolean getIsAvailable() {
