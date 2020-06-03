@@ -123,6 +123,8 @@ public class Vehicle {
 			announcement = announcement.replace("\"", " ");
 		if (announcement.contains("'"))
 			announcement = announcement.replace("'", "");
+		if (announcement.length() > 256)
+			announcement = announcement.substring(0, 256);
 		this.announcement = announcement;
 	}	
 	public boolean getIsAvailable() {
