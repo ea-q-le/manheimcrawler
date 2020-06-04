@@ -101,7 +101,20 @@ This application is NOT designed for commercial use and should NOT be copied for
 - Added logic to check whether a vehicle already exists in the DB by the
   given VIN: the vehicle details are not considered to be sent via email 
   if exists, they are otherwise.
-    
+  
+> **Releases.0.2.2-0.2.6** from 5/18 to 6/04/2020
+
+**Release Notes:**
+- Configured DataBase timeout settings to allow multi-hour program run.
+- Performance enhancements:
+  - Validating vehicle against the database records 
+    before trying to fetch the vehicle sales status;
+  - Enhancing the Driver singleton to be truly thread safe;
+  - Updates to parameters;
+  - Fetching all the VINs from the database only once to store it as
+    a list, and only then checking whether a current vehicle VIN exists
+    within this list, rather than querying the database every time.
+
 ---
 
 ## Future Improvements / Work-in-Progress

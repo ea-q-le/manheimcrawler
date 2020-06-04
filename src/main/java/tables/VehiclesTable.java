@@ -2,12 +2,20 @@ package tables;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.List;
 
 import beans.Vehicle;
 import utilities.DBUtils;
 
 public class VehiclesTable {
 	public static final String TABLE_NAME = "vehicles";
+	public static final List<String> allVins;
+	
+	static {
+		String query = "SELECT vin " 
+				+ "FROM " + DBUtils.SCHEMA + "." + VehiclesTable.TABLE_NAME + ";";
+		allVins = DBUtils.getColumnDataStringList(query, "vin");
+	}
 	
 	/** VEHICLES 	-> table ddl
 	 * 
@@ -187,20 +195,15 @@ public class VehiclesTable {
 	 * Given a VIN of a Vehicle object as a String,
 	 * the method returns whether that VIN is present in the
 	 * 'vehicles' table within the database.
-	 * IMPORTANT: The VIN should be passed in the way it is 
+	 * ***IMPORTANT***: The VIN should be passed in the way it is 
 	 * formatted the first time. Hence it is necessary to utilize
 	 * the getVIN() instead of passing the String fetched from the site.
+	 * ***NOTE***: The method is dependent on successful generation
+	 * of the List<String> allVins as the CONSTANT of this class.
 	 * @param vin fetched using a vehicle object's getVIN()  
 	 * @return boolean value whether the given vin exists in 'vehicles' table
 	 */
 	public static boolean vehicleExistsByVIN(String vin) {
-		return (DBUtils.getRowCount(
-				"SELECT *\n"
-				+ "FROM " 
-						+ DBUtils.SCHEMA + "." 
-						+ VehiclesTable.TABLE_NAME + "\n"
-				+ "WHERE "
-					+ "vin = \"" + vin + "\";")
-				) > 0;
+		return allVins.contains(vin);
 	}
 }
