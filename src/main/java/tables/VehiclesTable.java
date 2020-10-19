@@ -204,6 +204,10 @@ public class VehiclesTable {
 	 * @return boolean value whether the given vin exists in 'vehicles' table
 	 */
 	public static boolean vehicleExistsByVIN(String vin) {
-		return allVins.contains(vin);
+		if (allVins.contains(vin)) {
+			allVins.remove(vin);
+			return true;
+		}
+		return false;
 	}
 }

@@ -23,6 +23,9 @@ public class Main {
 		
 		// fetch the start time
 		long startTime = System.currentTimeMillis();
+		
+		// establish DB connection
+		DBUtils.createDBConnection();
 
 		// go to manheim.com
 		HomePage.goToHomePage();
@@ -31,6 +34,8 @@ public class Main {
 		Driver.getDriver().manage().window().maximize();
 
 		// go to sign in page
+		// as of 7/08, this navigation has been @Deprecated
+		// need repetitive testing to validate and remove the step
 		HomePage.goToSignInPage();
 
 		// sign in to the system
@@ -43,9 +48,6 @@ public class Main {
 		// go to the next 7 days
 		MyManheimPage.goToNext7Days();
 		waitForLoad();
-
-		// establish DB connection
-		DBUtils.createDBConnection();
 		
 		// iterate through each auction vehicle
 		crawler();
@@ -60,7 +62,10 @@ public class Main {
 		long runTimeSeconds = (endTime - startTime) / 1000;
 		
 		// send an email the output String with run date
-		SendEmail.sendEmailTo(
+		// if the 'emailToBeSent' value in application.config
+		// is set to 'true'
+		if (SendEmail.EMAIL_TO_BE_SENT)
+			SendEmail.sendEmailTo(
 				ConfigReader.getProperty("recipients"),
 				"Manheim vehicles > BOT RUN on " + todaysDate("MM/dd/yyyy")
 					+ "\tTime taken: " + runTimeSeconds + " seconds"

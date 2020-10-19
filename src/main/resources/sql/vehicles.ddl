@@ -1,3 +1,7 @@
+create database manheim_crawler;
+
+use manheim_crawler;
+
 create table vehicles (
 	id 				bigint 			not null auto_increment primary key,
     year 			int 			null,

@@ -71,7 +71,8 @@ public class DBUtils {
     public static void createDBConnection() {
         String url = "jdbc:mysql://" + System.getenv("db_server")
                 + ":" + System.getenv("db_port")
-                + "?useUnicode=true"
+                + "/manheim_crawler"
+                /*+ "?useUnicode=true"
                 + "&useJDBCCompliantTimezoneShift=true"
                 + "&useLegacyDatetimeCode=false"
                 + "&serverTimezone=Europe/Moscow"
@@ -82,7 +83,8 @@ public class DBUtils {
                 		+ "NO_ENGINE_SUBSTITUTION,"
                 		+ "PAD_CHAR_TO_FULL_LENGTH',"
                 		+ "interactive_timeout=2147483,"
-                		+ "wait_timeout=2147483";
+                		+ "wait_timeout=2147483"
+                 */		;
         String user = System.getenv("db_username");
         String password = System.getenv("db_password");
 

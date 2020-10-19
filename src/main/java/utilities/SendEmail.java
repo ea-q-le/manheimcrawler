@@ -21,6 +21,7 @@ import utilities.ConfigReader;
  */
 public class SendEmail {
 	public static final short EMAIL_LIMIT;
+	public static final boolean EMAIL_TO_BE_SENT;
 	
 	private final static String emailFrom;
 	private final static String username;
@@ -41,6 +42,9 @@ public class SendEmail {
 		else
 			EMAIL_LIMIT = Short.parseShort(
 					ConfigReader.getProperty("emailLimit"));
+		
+		EMAIL_TO_BE_SENT = Boolean.parseBoolean(
+				ConfigReader.getProperty("emailToBeSent"));
 	}
 
 	public static void sendEmailTo(String to, String subject, String body) {
