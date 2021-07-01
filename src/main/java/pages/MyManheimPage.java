@@ -12,7 +12,7 @@ public class MyManheimPage {
 		PageFactory.initElements(Driver.getDriver(), this);
 	}
 	
-	@FindBy (linkText = "Simulcast")
+	@FindBy (linkText = "Simulcast Sales")
 	private WebElement simulcastLink;
 	
 	@FindBy (linkText = "Next 7 Days")

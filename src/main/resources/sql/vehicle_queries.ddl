@@ -16,7 +16,7 @@ where ( announcements not like '%brand%'
   and (make_model like '%nissan%')
   and (year >= 2013 and year <= 2019)
   and (odometer <= 90000)
-  and (run_date >= '2020-10-19')
+  and (run_date >= '2020-10-23')
 ;
 
 select *
@@ -35,5 +35,11 @@ where ( announcements not like '%brand%'
    or announcements like '%flood%'
    or announcements like '%bio%')
   and (odometer <= 120000)
-  and (run_date >= '2020-10-19')
+  and (run_date >= '2020-10-23')
 ;
+
+set sql_safe_updates = 0;
+
+delete
+from manheim_crawler.vehicles
+where run_date <= '2020-10-24';

@@ -33,14 +33,28 @@ public class Main {
 		// maximize window to avoid hidden element behavior
 		Driver.getDriver().manage().window().maximize();
 
+		BrowserUtils.wait(5);
 		// go to sign in page
 		// as of 7/08, this navigation has been @Deprecated
 		// need repetitive testing to validate and remove the step
-		HomePage.goToSignInPage();
+//		HomePage.goToSignInPage();
+		/**
+		 * As of 6/12/2021 the utility above started throwing errors
+		 * when being executed in Chrome Headless mode.
+		 * Further analysis discovered that the sign-in page is
+		 * directly accessible via the link within the get method below.
+		 * Hence the code base needs to be refactored accordingly
+		 * in order to remove redundant steps of fetching the Home Page
+		 * and steps that follow until the step below.
+		 */
+		Driver.getDriver().get("https://members.manheim.com/gateway/login");
 
 		// sign in to the system
 		SignInPage.signIn();
 
+		// if email verification page comes up, try to SKIP
+		HomePage.tryToSkipEmailVerification();
+		
 		// go to Simulcast page
 		MyManheimPage.goToSimulcast();
 		waitForLoad();

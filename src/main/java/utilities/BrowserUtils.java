@@ -78,7 +78,7 @@ public class BrowserUtils {
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 360);
+        WebDriverWait wait = new WebDriverWait(driver, 600);
         wait.until(pageLoadCondition);
     }
 	
