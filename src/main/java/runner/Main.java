@@ -64,7 +64,12 @@ public class Main {
 		waitForLoad();
 		
 		// iterate through each auction vehicle
-		crawler();
+		try { 
+			crawler(); 
+		} catch(Exception e) { 
+			System.out.println("Could NOT complete complete run.");
+			e.printStackTrace(); 
+		}
 		
 		// destroy the DB connection
 		DBUtils.destroyDBConnection();
@@ -175,6 +180,16 @@ System.out.println("LIST OF VEHICLES TO BE EMAILED:\n" + Vehicle.getMatches());
 			// fetch the vehicle run date and time
 			String runDateTime = AuctionPage.getVehicleRunDateTime(currentCRLink);
 			vehicle.setRunTimestamp(runDateTime);
+			
+			// find out if the vehicle is already in the DB and skip if true AND if the run_date is also a match
+			// otherwise, add it to DB (with column rerun set to Y
+//			if (VehiclesTable.vehicleExistsByVIN(vehicle.getVIN())) {
+//				String query = "SELECT run_date "
+//						+ "FROM " + DBUtils.SCHEMA + "." + VehiclesTable.TABLE_NAME + " "
+//						+ "WHERE vin = '" + vehicle.getVIN() + "';";
+//				DateTime runDateInDB = (DateTime)
+//				continue;
+//			}
 			
 			// fetch the vehicle title information
 			String title = AuctionPage.getVehicleTitle(currentCRLink);

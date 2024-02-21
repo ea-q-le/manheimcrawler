@@ -18,7 +18,15 @@ public class MyManheimPage {
 	@FindBy (linkText = "Next 7 Days")
 	private WebElement next7DaysLink;
 	
+	@FindBy (css = "button[aria-label='Close']")
+	private WebElement surveyPopupCloseButton;
+	
 	public static void goToSimulcast() {
+		try {
+			new MyManheimPage().surveyPopupCloseButton.click();
+		} catch (Exception e) {
+			System.out.println("Survey popup did NOT appear");
+		}
 		new MyManheimPage().simulcastLink.click();
 	}
 	

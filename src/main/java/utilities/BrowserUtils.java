@@ -1,6 +1,7 @@
 package utilities;
 
 import java.text.*;
+import java.time.Duration;
 import java.util.*;
 
 import org.openqa.selenium.JavascriptExecutor;
@@ -67,7 +68,7 @@ public class BrowserUtils {
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 240);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(240));
         wait.until(pageLoadCondition);
     }
 	public static void waitForLoad() {
@@ -78,7 +79,7 @@ public class BrowserUtils {
                         return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
                     }
                 };
-        WebDriverWait wait = new WebDriverWait(driver, 600);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(600));
         wait.until(pageLoadCondition);
     }
 	
